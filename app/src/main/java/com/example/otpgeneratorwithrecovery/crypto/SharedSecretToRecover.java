@@ -18,7 +18,7 @@ public class SharedSecretToRecover {
 
     private OTPURIFormat format;
     private String recipient;
-    private int recipientNumber; // 0-based
+    private int recipientNumber; // 1-based
     private String[] recipients;
     private String encryptedSecret;
     private String sharedEncryptionKey;
@@ -105,7 +105,7 @@ public class SharedSecretToRecover {
 
         this.recipients = recipientsString.split(",");
         this.recipientNumber = Integer.valueOf(recipientNumberString);
-        if (!(0 <= this.recipientNumber && this.recipientNumber < this.recipients.length) || !this.recipient.equals(this.recipients[this.recipientNumber])) {
+        if (!(1 <= this.recipientNumber && this.recipientNumber <= this.recipients.length) || !this.recipient.equals(this.recipients[this.recipientNumber-1])) {
             throw new Exception("inputted string not in shared otp secret format.");
         }
     }
