@@ -1,10 +1,13 @@
 package com.example.otpgeneratorwithrecovery.crypto;
 
+import com.codahale.shamir.Scheme;
+
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +45,39 @@ public class SharedSecret {
         IvParameterSpec ivParameterSpec = SharedSecret.generateIv();
         String encryptedSecret = SharedSecret.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
 
-        // TODO: share secret
-        return new String[32];
+        // shares = SSSS(iv + key), iv is needed for AES CBC
+        ArrayList<Byte> listNeedToShare = new ArrayList<>();
+        byte[] iv = ivParameterSpec.getIV();
+        for (int i = 0; i < iv.length; i++) {
+            listNeedToShare.add(iv[i]);
+        }
+        byte[] keyBytes = key.getEncoded();
+        for (int i = 0; i < keyBytes.length; i++) {
+            listNeedToShare.add(keyBytes[i]);
+        }
+
+        byte[] needToShare = new byte[listNeedToShare.size()];
+        for (int i = 0; i < listNeedToShare.size(); i++) {
+            needToShare[i++] = listNeedToShare.get(i);
+        }
+
+        // split concat(iv, key) to recipients
+        Scheme scheme = new Scheme(new SecureRandom(), recipients.length, recipients.length);
+        Map<Integer, byte[]> parts = scheme.split(needToShare);
+
+        ArrayList<String> shares = new ArrayList<>();
+        for (int i = 0; i < recipients.length; i++) {
+            shares.add(new SharedSecretToRecover(
+                    secret,
+                    recipients[i],
+                    i + 1,
+                    recipients,
+                    encryptedSecret,
+                    Base32Wrapper.encodeBytesToString(parts.get(i + 1))
+            ).toString());
+        }
+
+        return shares.toArray(new String[0]);
     }
 
     // TODO: recover
