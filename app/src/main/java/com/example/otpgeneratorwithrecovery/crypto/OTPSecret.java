@@ -82,8 +82,8 @@ public class OTPSecret {
         this.secret = Base32Wrapper.decodeStringToHexString(this.base32EncodedSecret);
     }
 
-    public String getSecret() {
-        return this.secret;
+    public String getBase32EncodedSecret() {
+        return this.base32EncodedSecret;
     }
 
     public String getIssuer() {
