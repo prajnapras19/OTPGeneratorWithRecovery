@@ -93,4 +93,25 @@ public class OTPSecret {
     public String getAccountName() {
         return this.accountName;
     }
+
+    public String getIdentifier() {
+        return String.format("%s:%s", this.issuer, this.accountName);
+    }
+
+    public String getOTP() {
+        // TODO: add support for HOTP
+        if (this.type.equals("hotp")) {
+            return "";
+        }
+
+        // totp
+        long now = System.currentTimeMillis() / 1000L;
+        long x = Long.parseLong(period); // assume period is always more than 0, for now it is always 30 since the custom period is ignored.
+        long time = now / x;
+        String steps = Long.toHexString(time).toUpperCase();
+        while (steps.length() < 16) {
+            steps = "0" + steps;
+        }
+        return TOTP.generateTOTP(this.secret, steps, this.digits, String.format("Hmac%s", this.algorithm));
+    }
 }
