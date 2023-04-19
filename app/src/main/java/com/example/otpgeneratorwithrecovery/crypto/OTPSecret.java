@@ -95,7 +95,7 @@ public class OTPSecret {
     }
 
     public String getIdentifier() {
-        return String.format("%s:%s", this.issuer, this.accountName);
+        return format.getLabel();
     }
 
     public String getOTP() {

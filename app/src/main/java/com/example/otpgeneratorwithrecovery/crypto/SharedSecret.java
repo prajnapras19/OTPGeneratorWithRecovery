@@ -40,13 +40,6 @@ public class SharedSecret {
     public static String[] generate(OTPSecret secret, String[] recipients) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException,
             BadPaddingException, IllegalBlockSizeException {
-        OTPURIFormat secretFormat = secret.getFormat();
-
-        Map<String, String> newParameterMap = new HashMap<>();
-        newParameterMap.putAll(secretFormat.getParameterMap());
-
-        // omit secret
-        newParameterMap.remove("secret");
 
         SecretKey key = SharedSecret.generateKey(128);
         IvParameterSpec ivParameterSpec = SharedSecret.generateIv();
