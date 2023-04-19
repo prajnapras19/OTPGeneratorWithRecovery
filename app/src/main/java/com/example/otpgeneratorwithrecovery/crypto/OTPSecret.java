@@ -25,8 +25,17 @@ public class OTPSecret {
     public OTPSecret(String otpURIString) throws Exception {
         OTPURIFormat format = new OTPURIFormat(otpURIString);
 
-        if (format.getPrefix() != "otpauth") {
+        if (format.getPrefix() == null || !format.getPrefix().equals("otpauth")) {
             throw new Exception("inputted string not in otp secret format.");
+        }
+
+        this.type = format.getType();
+        if (type == null) {
+            throw new Exception("inputted string not in otp secret format.");
+        }
+        if (!type.equals("totp")) {
+            // TODO: add support for HOTP
+            throw new Exception("current supported type: totp");
         }
 
         this.secret = format.getParameter("secret");
@@ -34,16 +43,13 @@ public class OTPSecret {
             throw new Exception("secret is required.");
         }
 
-        this.type = format.getType();
-        if (!type.equals("totp")) {
-            // TODO: add support for HOTP
-            throw new Exception("current supported type: totp");
-        }
-
         if (format.getParameter("issuer") != null) {
             this.issuer = format.getParameter("issuer");
         }
 
+        if (format.getLabel() == null) {
+            throw new Exception("inputted string not in otp secret format.");
+        }
         String[] labelParts = format.getLabel().split(":");
         if (labelParts.length == 2) {
             this.accountName = labelParts[1].strip();
@@ -65,5 +71,17 @@ public class OTPSecret {
         this.algorithm = "SHA1";
         this.digits = "6";
         this.period = "30";
+    }
+
+    public String getSecret() {
+        return this.secret;
+    }
+
+    public String getIssuer() {
+        return this.issuer;
+    }
+
+    public String getAccountName() {
+        return this.accountName;
     }
 }
