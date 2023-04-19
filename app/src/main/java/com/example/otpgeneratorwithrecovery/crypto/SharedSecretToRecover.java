@@ -42,6 +42,8 @@ public class SharedSecretToRecover {
         this.recipient = recipient;
         this.recipientNumber = recipientNumber;
         this.recipients = recipients;
+
+        // assume that encryptedSecret and sharedEncryptionKey is already encoded in base32 format
         this.encryptedSecret = encryptedSecret;
         this.sharedEncryptionKey = sharedEncryptionKey;
     }
@@ -93,6 +95,7 @@ public class SharedSecretToRecover {
             throw new Exception("label format not recognized.");
         }
 
+        // check existence of params
         this.recipient = this.format.getParameter(SharedSecretToRecover.RECIPIENT);
         String recipientNumberString = this.format.getParameter(SharedSecretToRecover.RECIPIENT_NUMBER);
         String recipientsString = this.format.getParameter(SharedSecretToRecover.RECIPIENTS);
@@ -103,9 +106,16 @@ public class SharedSecretToRecover {
             throw new Exception("inputted string not in shared otp secret format.");
         }
 
+        // validate recipient number in recipients
+        // remember that recipientNumber is 1-based
         this.recipients = recipientsString.split(",");
         this.recipientNumber = Integer.valueOf(recipientNumberString);
         if (!(1 <= this.recipientNumber && this.recipientNumber <= this.recipients.length) || !this.recipient.equals(this.recipients[this.recipientNumber-1])) {
+            throw new Exception("inputted string not in shared otp secret format.");
+        }
+
+        // validate sharedEncryptionKey and encryptedSecret, must be base32 encoded, based on encryption and decryption in SharedSecret class
+        if (Base32Wrapper.decodeStringToString(this.sharedEncryptionKey).equals("") || Base32Wrapper.decodeStringToString(this.encryptedSecret).equals("")) {
             throw new Exception("inputted string not in shared otp secret format.");
         }
     }
