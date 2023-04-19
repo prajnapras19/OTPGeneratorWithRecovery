@@ -114,4 +114,12 @@ public class OTPSecret {
         }
         return TOTP.generateTOTP(this.secret, steps, this.digits, String.format("Hmac%s", this.algorithm));
     }
+
+    public String getEncodedForSaving() {
+        return new String((new Base32()).encode(this.format.toString().getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+    }
+
+    public static OTPSecret getDecodedFromSaving(String encoded) throws Exception {
+        return new OTPSecret(new String((new Base32()).decode(encoded.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
+    }
 }
