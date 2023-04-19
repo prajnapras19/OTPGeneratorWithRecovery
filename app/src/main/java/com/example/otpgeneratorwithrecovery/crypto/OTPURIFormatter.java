@@ -1,7 +1,5 @@
 package com.example.otpgeneratorwithrecovery.utils;
 
-// PREFIX://TYPE/LABEL?PARAMETERS
-
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * OTP Key URI Formatter, based on https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+ * format: PREFIX://TYPE/LABEL?PARAMETERS
+ */
 public class OTPURIFormatter {
     private String otpURIString;
     private String prefix;
