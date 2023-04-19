@@ -7,6 +7,8 @@ import org.apache.commons.codec.binary.Base32;
  * Validation of the received QR code, encoding/decoding for saving in the storage, and OTP generation will be done from this class.
  */
 public class OTPSecret {
+    public static final String PREFIX_OTP_SECRET = "otpauth";
+
     private OTPURIFormat format;
     private String type;
     private String base32EncodedSecret;
@@ -27,10 +29,12 @@ public class OTPSecret {
     private String counter;
 
     public OTPSecret(String otpURIString) throws Exception {
-        OTPURIFormat format = new OTPURIFormat(otpURIString);
-        this.format = format;
+        this(new OTPURIFormat(otpURIString));
+    }
 
-        if (format.getPrefix() == null || !format.getPrefix().equals("otpauth")) {
+    public OTPSecret(OTPURIFormat format) throws Exception {
+        this.format = format;
+        if (format.getPrefix() == null || !format.getPrefix().equals(OTPSecret.PREFIX_OTP_SECRET)) {
             throw new Exception("inputted string not in otp secret format.");
         }
 

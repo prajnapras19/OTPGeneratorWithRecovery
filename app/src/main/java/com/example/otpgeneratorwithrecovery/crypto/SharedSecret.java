@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * This class provides OTP secret sharing scheme using SSSS (Shamir's Secret Sharing Scheme).
@@ -80,7 +82,41 @@ public class SharedSecret {
         return shares.toArray(new String[0]);
     }
 
-    // TODO: recover
+    public static OTPSecret recover(String[] shares) throws Exception {
+        Map<Integer, byte[]> sharedSecret = new HashMap<>();
+        SharedSecretToRecover pickedSharedSecretToRecover = new SharedSecretToRecover(shares[0]); // pick one to get its OTPURIFormat, assume shares.length > 0
+        int recipientsLength = pickedSharedSecretToRecover.getRecipients().length;
+        String encryptedSecret = pickedSharedSecretToRecover.getEncryptedSecret();
+
+        for (String s : shares) {
+            SharedSecretToRecover sharedSecretToRecover = new SharedSecretToRecover(s);
+            sharedSecret.put(sharedSecretToRecover.getRecipientNumber(), Base32Wrapper.decodeStringToBytes(sharedSecretToRecover.getSharedEncryptionKey()));
+        }
+
+        Scheme scheme = new Scheme(new SecureRandom(), recipientsLength, recipientsLength);
+        byte[] recovered = scheme.join(sharedSecret);
+
+        byte[] ivBytes = Arrays.copyOfRange(recovered, 0, 16);
+        byte[] keyBytes = Arrays.copyOfRange(recovered, 16, 32);
+
+        String decryptedSecret = SharedSecret.decrypt(encryptedSecret, new SecretKeySpec(keyBytes, "AES"), new IvParameterSpec(ivBytes));
+
+        Map<String, String> newParameterMap = new HashMap<>();
+        newParameterMap.putAll(pickedSharedSecretToRecover.getFormat().getParameterMap());
+
+        // omit SharedSecretToRecover parameters
+        newParameterMap.remove(SharedSecretToRecover.RECIPIENT);
+        newParameterMap.remove(SharedSecretToRecover.RECIPIENTS);
+        newParameterMap.remove(SharedSecretToRecover.RECIPIENT_NUMBER);
+        newParameterMap.remove(SharedSecretToRecover.ENCRYPTED_SECRET);
+        newParameterMap.remove(SharedSecretToRecover.SHARED_ENCRYPTION_KEY);
+
+        // insert secret to map
+        newParameterMap.put("secret", decryptedSecret);
+
+        OTPURIFormat format = new OTPURIFormat(OTPSecret.PREFIX_OTP_SECRET, pickedSharedSecretToRecover.getFormat().getType(), pickedSharedSecretToRecover.getFormat().getLabel(), newParameterMap);
+        return new OTPSecret(format);
+    }
 
     public static String encrypt(String input, SecretKey key, IvParameterSpec iv) throws Exception {
         Cipher cipher = Cipher.getInstance(encryption);

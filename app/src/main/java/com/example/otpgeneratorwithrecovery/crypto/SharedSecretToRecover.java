@@ -9,12 +9,12 @@ import java.util.Map;
  * This class provide validation for one share of shared secret, and saved in OTPURIFormat
  */
 public class SharedSecretToRecover {
-    private static final String PREFIX_SHARES = "otpshares";
-    private static final String RECIPIENT = "recipient";
-    private static final String RECIPIENTS = "recipients";
-    private static final String RECIPIENT_NUMBER = "recipientNumber";
-    private static final String ENCRYPTED_SECRET = "encryptedSecret";
-    private static final String SHARED_ENCRYPTION_KEY = "sharedEncryptionKey";
+    public static final String PREFIX_SHARES = "otpshares";
+    public static final String RECIPIENT = "recipient";
+    public static final String RECIPIENTS = "recipients";
+    public static final String RECIPIENT_NUMBER = "recipientNumber";
+    public static final String ENCRYPTED_SECRET = "encryptedSecret";
+    public static final String SHARED_ENCRYPTION_KEY = "sharedEncryptionKey";
 
     private OTPURIFormat format;
     private String recipient;
@@ -161,5 +161,25 @@ public class SharedSecretToRecover {
         newParameterMap.put(SharedSecretToRecover.SHARED_ENCRYPTION_KEY, sharedEncryptionKey);
 
         return (new OTPURIFormat(PREFIX_SHARES, this.format.getType(), this.format.getLabel(), newParameterMap)).toString();
+    }
+
+    public String getEncryptedSecret() {
+        return this.encryptedSecret;
+    }
+
+    public String[] getRecipients() {
+        return this.recipients;
+    }
+
+    public int getRecipientNumber() {
+        return this.recipientNumber;
+    }
+
+    public String getSharedEncryptionKey() {
+        return this.sharedEncryptionKey;
+    }
+
+    public OTPURIFormat getFormat() {
+        return this.format;
     }
 }
