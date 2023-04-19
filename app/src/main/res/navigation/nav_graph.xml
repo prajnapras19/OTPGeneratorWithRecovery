@@ -9,5 +9,18 @@
         android:name="com.example.otpgeneratorwithrecovery.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
+        <action
+            android:id="@+id/action_FirstFragment_to_OTPSecretQRCodeScannerFragment"
+            app:destination="@id/OTPSecretQRCodeScannerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/OTPSecretQRCodeScannerFragment"
+        android:name="com.example.otpgeneratorwithrecovery.OTPSecretQRCodeScannerFragment"
+        android:label="@string/otp_secret_qr_code_scanner_fragment_label"
+        tools:layout="@layout/fragment_otp_secret_qr_code_scanner">
+
+        <action
+            android:id="@+id/action_OTPSecretQRCodeScannerFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>
