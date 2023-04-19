@@ -30,17 +30,14 @@ public class SharedSecret {
         return new IvParameterSpec(iv);
     }
 
-    public static SecretKey generateKey(int n) throws NoSuchAlgorithmException {
+    public static SecretKey generateKey(int n) throws Exception {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         keyGenerator.init(n);
         SecretKey key = keyGenerator.generateKey();
         return key;
     }
 
-    public static String[] generate(OTPSecret secret, String[] recipients) throws NoSuchPaddingException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException {
-
+    public static String[] generate(OTPSecret secret, String[] recipients) throws Exception {
         SecretKey key = SharedSecret.generateKey(128);
         IvParameterSpec ivParameterSpec = SharedSecret.generateIv();
         String encryptedSecret = SharedSecret.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
@@ -51,19 +48,14 @@ public class SharedSecret {
 
     // TODO: recover
 
-    public static String encrypt(String input, SecretKey key, IvParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException {
+    public static String encrypt(String input, SecretKey key, IvParameterSpec iv) throws Exception {
         Cipher cipher = Cipher.getInstance(encryption);
         cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         byte[] cipherText = cipher.doFinal(input.getBytes());
         return Base32Wrapper.encodeBytesToString(cipherText);
     }
 
-    public static String decrypt(String base32EncodedCipherText, SecretKey key,
-                                 IvParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException {
+    public static String decrypt(String base32EncodedCipherText, SecretKey key, IvParameterSpec iv) throws Exception {
         Cipher cipher = Cipher.getInstance(encryption);
         cipher.init(Cipher.DECRYPT_MODE, key, iv);
         byte[] decrypted = cipher.doFinal(Base32Wrapper.decodeStringToBytes(base32EncodedCipherText));
