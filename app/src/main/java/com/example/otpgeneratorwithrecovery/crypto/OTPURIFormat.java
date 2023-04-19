@@ -1,4 +1,4 @@
-package com.example.otpgeneratorwithrecovery.utils;
+package com.example.otpgeneratorwithrecovery.crypto;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -12,14 +12,14 @@ import java.util.Map;
  * OTP Key URI Formatter, based on https://github.com/google/google-authenticator/wiki/Key-Uri-Format
  * format: PREFIX://TYPE/LABEL?PARAMETERS
  */
-public class OTPURIFormatter {
+public class OTPURIFormat {
     private String otpURIString;
     private String prefix;
     private String type;
     private String label;
     private Map<String, String> parameterMap;
 
-    public OTPURIFormatter(String otpURIString) {
+    public OTPURIFormat(String otpURIString) {
         String[] prefixSplit = otpURIString.split("://");
         if (prefixSplit.length != 2) {
             return;
@@ -52,7 +52,7 @@ public class OTPURIFormatter {
         }
     }
 
-    public OTPURIFormatter(String prefix, String type, String label, Map<String, String> parameterMap) {
+    public OTPURIFormat(String prefix, String type, String label, Map<String, String> parameterMap) {
         this.prefix = prefix;
         this.type = type;
         this.label = label;

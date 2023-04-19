@@ -4,6 +4,13 @@ package com.example.otpgeneratorwithrecovery.crypto;
     Edited from https://www.rfc-editor.org/rfc/rfc6238
 */
 
+import java.lang.reflect.UndeclaredThrowableException;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
 /**
  * TOTP implementation, edited from source code attached in RFC 6238 (https://www.rfc-editor.org/rfc/rfc6238)
  */
