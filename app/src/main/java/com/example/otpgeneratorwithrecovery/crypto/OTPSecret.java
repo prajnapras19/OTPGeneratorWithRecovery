@@ -48,7 +48,7 @@ public class OTPSecret {
         if (secret == null) {
             throw new Exception("secret is required.");
         }
-        if ((new Base32()).decode(secret.getBytes(StandardCharsets.UTF_8)) == null) {
+        if (Base32Wrapper.decode(this.secret).equals("")) {
             throw new Exception("secret is not in Base32 format.");
         }
 
@@ -113,13 +113,5 @@ public class OTPSecret {
             steps = "0" + steps;
         }
         return TOTP.generateTOTP(this.secret, steps, this.digits, String.format("Hmac%s", this.algorithm));
-    }
-
-    public String getEncodedForSaving() {
-        return new String((new Base32()).encode(this.format.toString().getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-    }
-
-    public static OTPSecret getDecodedFromSaving(String encoded) throws Exception {
-        return new OTPSecret(new String((new Base32()).decode(encoded.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
     }
 }
