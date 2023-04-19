@@ -1,10 +1,15 @@
 package com.example.otpgeneratorwithrecovery.crypto;
 
+import org.apache.commons.codec.binary.Base32;
+
+import java.nio.charset.StandardCharsets;
+
 /**
  * This class is a wrapper for the shared OTP secret from a service provider.
  * Validation of the received QR code, encoding/decoding for saving in the storage, and OTP generation will be done from this class.
  */
 public class OTPSecret {
+    private OTPURIFormat format;
     private String type;
     private String secret;
     private String issuer;
@@ -24,6 +29,7 @@ public class OTPSecret {
 
     public OTPSecret(String otpURIString) throws Exception {
         OTPURIFormat format = new OTPURIFormat(otpURIString);
+        this.format = format;
 
         if (format.getPrefix() == null || !format.getPrefix().equals("otpauth")) {
             throw new Exception("inputted string not in otp secret format.");
@@ -41,6 +47,9 @@ public class OTPSecret {
         this.secret = format.getParameter("secret");
         if (secret == null) {
             throw new Exception("secret is required.");
+        }
+        if ((new Base32()).decode(secret.getBytes(StandardCharsets.UTF_8)) == null) {
+            throw new Exception("secret is not in Base32 format.");
         }
 
         if (format.getParameter("issuer") != null) {
