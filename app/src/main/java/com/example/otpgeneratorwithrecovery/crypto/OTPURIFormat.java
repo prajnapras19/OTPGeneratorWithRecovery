@@ -90,4 +90,8 @@ public class OTPURIFormat {
     public String getParameter(String key) {
         return this.parameterMap.get(key);
     }
+
+    public Map<String, String> getParameterMap() {
+        return this.parameterMap;
+    }
 }

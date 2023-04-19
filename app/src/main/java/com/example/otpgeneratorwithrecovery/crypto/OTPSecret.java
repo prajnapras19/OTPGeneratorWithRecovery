@@ -2,8 +2,6 @@ package com.example.otpgeneratorwithrecovery.crypto;
 
 import org.apache.commons.codec.binary.Base32;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * This class is a wrapper for the shared OTP secret from a service provider.
  * Validation of the received QR code, encoding/decoding for saving in the storage, and OTP generation will be done from this class.
@@ -11,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 public class OTPSecret {
     private OTPURIFormat format;
     private String type;
+    private String base32EncodedSecret;
     private String secret;
     private String issuer;
     private String accountName;
@@ -44,11 +43,11 @@ public class OTPSecret {
             throw new Exception("current supported type: totp");
         }
 
-        this.secret = format.getParameter("secret");
-        if (secret == null) {
+        this.base32EncodedSecret = format.getParameter("secret");
+        if (this.base32EncodedSecret == null) {
             throw new Exception("secret is required.");
         }
-        if (Base32Wrapper.decode(this.secret).equals("")) {
+        if (Base32Wrapper.decodeStringToHexString(this.base32EncodedSecret).equals("")) {
             throw new Exception("secret is not in Base32 format.");
         }
 
@@ -80,6 +79,7 @@ public class OTPSecret {
         this.algorithm = "SHA1";
         this.digits = "6";
         this.period = "30";
+        this.secret = Base32Wrapper.decodeStringToHexString(this.base32EncodedSecret);
     }
 
     public String getSecret() {
@@ -113,5 +113,9 @@ public class OTPSecret {
             steps = "0" + steps;
         }
         return TOTP.generateTOTP(this.secret, steps, this.digits, String.format("Hmac%s", this.algorithm));
+    }
+
+    public OTPURIFormat getFormat() {
+        return this.format;
     }
 }
