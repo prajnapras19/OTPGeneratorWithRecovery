@@ -59,11 +59,12 @@ public class ListOTPFragment  extends Fragment {
 
         binding.linearLayoutListOtp.removeAllViews();
 
+        int i = 1;
         for (String k : Util.getSortedMapKey(otpSecrets)) {
             try {
                 OTPSecret otpSecret = new OTPSecret((String) otpSecrets.get(k));
                 TextView textViewOTPIdentifier = new TextView(getContext());
-                textViewOTPIdentifier.setText(otpSecret.getIdentifier());
+                textViewOTPIdentifier.setText(String.format("%d. %s", i, otpSecret.getIdentifier()));
                 textViewOTPIdentifier.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                 binding.linearLayoutListOtp.addView(textViewOTPIdentifier);
 
@@ -114,6 +115,7 @@ public class ListOTPFragment  extends Fragment {
                 TextView divider = new TextView(getContext());
                 divider.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
                 binding.linearLayoutListOtp.addView(divider);
+                i++;
             } catch (Exception e) {
                 Log.v("ListOTPFragment", e.getMessage());
             }
