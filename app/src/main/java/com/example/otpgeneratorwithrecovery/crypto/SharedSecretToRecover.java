@@ -22,11 +22,11 @@ public class SharedSecretToRecover {
     private String[] recipients;
     private String encryptedSecret;
     private String sharedEncryptionKey;
+    private String issuer;
+    private String accountName;
 
     // TODO: refactor to remove this, because this just become a placeholder for validation
     private String type;
-    private String issuer;
-    private String accountName;
 
     /**
      * The constructor for case when the user wants to create the shared secret.
@@ -37,15 +37,49 @@ public class SharedSecretToRecover {
      * @param encryptedSecret
      * @param sharedEncryptionKey
      */
-    public SharedSecretToRecover(OTPSecret secret, String recipient, int recipientNumber, String[] recipients, String encryptedSecret, String sharedEncryptionKey) {
+    public SharedSecretToRecover(OTPSecret secret, String recipient, int recipientNumber, String[] recipients, String encryptedSecret, String sharedEncryptionKey) throws Exception {
         this.format = secret.getFormat();
         this.recipient = recipient;
         this.recipientNumber = recipientNumber;
         this.recipients = recipients;
+        this.accountName = "";
+        this.issuer = "";
 
         // assume that encryptedSecret and sharedEncryptionKey is already encoded in base32 format
         this.encryptedSecret = encryptedSecret;
         this.sharedEncryptionKey = sharedEncryptionKey;
+
+        if (format.getParameter("issuer") != null) {
+            this.issuer = format.getParameter("issuer");
+        }
+
+        if (format.getLabel() == null) {
+            throw new Exception("inputted string not in shared otp secret format.");
+        }
+        String[] labelParts = format.getLabel().split(":");
+        if (labelParts.length == 2) {
+            this.accountName = labelParts[1].strip();
+            if (this.issuer == null) {
+                this.issuer = labelParts[0];
+            } else if (!this.issuer.equals(labelParts[0])){
+                throw new Exception("issuer in label and parameter not match.");
+            }
+        } else if (labelParts.length == 1) {
+            this.accountName = labelParts[0];
+            if (this.issuer == null) {
+                // no issuer in parameter and label
+                this.issuer = "unknown";
+            }
+        } else {
+            throw new Exception("label format not recognized.");
+        }
+
+        if (this.accountName.equals("")) {
+            this.accountName = "unknown";
+        }
+        if (this.issuer.equals("")) {
+            this.issuer = "unknown";
+        }
     }
 
     /**
@@ -93,6 +127,13 @@ public class SharedSecretToRecover {
             }
         } else {
             throw new Exception("label format not recognized.");
+        }
+
+        if (this.accountName.equals("")) {
+            this.accountName = "unknown";
+        }
+        if (this.issuer.equals("")) {
+            this.issuer = "unknown";
         }
 
         // check existence of params
@@ -143,7 +184,7 @@ public class SharedSecretToRecover {
 
     @SuppressLint("DefaultLocale")
     public String getIdentifier() {
-        return String.format("%s:%s:%d", this.format.getLabel(), this.recipient, this.recipientNumber);
+        return String.format("%s:%s:%s:%d", this.issuer, this.accountName, this.recipient, this.recipientNumber);
     }
 
     public String toString() {
