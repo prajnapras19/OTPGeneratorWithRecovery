@@ -75,7 +75,7 @@ public class CreateBackupFragment extends Fragment {
                 if (binding.linearLayoutRecipientsCreateBackup.getChildCount() == 1) {
                     EditText editText = new EditText(getContext());
                     editText.setHint(String.format("Threshold (default: number of recipients)", binding.linearLayoutRecipientsCreateBackup.getChildCount() + 1));
-                    binding.linearLayoutRecipientsCreateBackup.addView(editText);
+                    binding.linearLayoutThresholdCreateBackup.addView(editText);
                 }
 
                 EditText editText = new EditText(getContext());
