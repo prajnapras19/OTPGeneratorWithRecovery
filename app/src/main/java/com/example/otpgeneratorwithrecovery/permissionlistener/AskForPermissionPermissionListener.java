@@ -1,9 +1,11 @@
-package com.example.otpgeneratorwithrecovery;
+package com.example.otpgeneratorwithrecovery.permissionlistener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import com.example.otpgeneratorwithrecovery.NeedPermissionFragment;
+import com.example.otpgeneratorwithrecovery.R;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;

@@ -1,14 +1,15 @@
-package com.example.otpgeneratorwithrecovery;
+package com.example.otpgeneratorwithrecovery.permissionlistener;
 
 import android.os.Handler;
 import android.os.Looper;
 
+import com.example.otpgeneratorwithrecovery.NeedPermissionFragment;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 
-public class AskForPermissionBackgroundThreadPermissionListener extends com.example.otpgeneratorwithrecovery.AskForPermissionPermissionListener {
+public class AskForPermissionBackgroundThreadPermissionListener extends AskForPermissionPermissionListener {
     private Handler handler = new Handler(Looper.getMainLooper());
 
     public AskForPermissionBackgroundThreadPermissionListener(NeedPermissionFragment fragment) {

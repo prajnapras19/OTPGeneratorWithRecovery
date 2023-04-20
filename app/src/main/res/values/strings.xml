@@ -5,4 +5,6 @@
 
     <string name="camera_permission_rationale_title">Permission Needed For Camera</string>
     <string name="camera_permission_rationale_message">This permission is needed to scan the QR code.</string>
+
+    <string name="otp_secret_shared_preferences_file">com.example.otpgeneratorwithrecovery.otpsecret</string>
 </resources>

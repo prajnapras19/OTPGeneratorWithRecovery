@@ -1,12 +1,16 @@
 package com.example.otpgeneratorwithrecovery;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.otpgeneratorwithrecovery.crypto.OTPSecret;
 import com.example.otpgeneratorwithrecovery.databinding.FragmentOtpSecretQrCodeScannerBinding;
+import com.example.otpgeneratorwithrecovery.permissionlistener.AskForPermissionBackgroundThreadPermissionListener;
+import com.example.otpgeneratorwithrecovery.permissionlistener.AskForPermissionErrorListener;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
@@ -57,7 +61,16 @@ public class OTPSecretQRCodeScannerFragment extends NeedPermissionFragment imple
 
     @Override
     public void handleResult(Result rawResult) {
-        // TODO
+        try {
+            OTPSecret secret = new OTPSecret(rawResult.getText());
+            // TODO
+        } catch (Exception e) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Error");
+            builder.setMessage(e.getMessage());
+            AlertDialog alert1 = builder.create();
+            alert1.show();
+        }
     }
 
     @Override
@@ -66,8 +79,8 @@ public class OTPSecretQRCodeScannerFragment extends NeedPermissionFragment imple
     }
 
     public void askForPermission() {
-        cameraPermissionListener = new com.example.otpgeneratorwithrecovery.AskForPermissionBackgroundThreadPermissionListener(this);
-        errorListener = new com.example.otpgeneratorwithrecovery.AskForPermissionErrorListener();
+        cameraPermissionListener = new AskForPermissionBackgroundThreadPermissionListener(this);
+        errorListener = new AskForPermissionErrorListener();
 
         new Thread(() -> Dexter.withContext(getContext())
                 .withPermission(Manifest.permission.CAMERA)
