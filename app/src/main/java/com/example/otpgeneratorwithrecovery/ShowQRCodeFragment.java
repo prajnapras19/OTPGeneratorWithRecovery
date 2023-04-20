@@ -16,7 +16,16 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * Class to show QR code
+ */
 public class ShowQRCodeFragment extends Fragment {
+    /**
+     * references:
+     * - https://www.geeksforgeeks.org/how-to-generate-qr-code-in-android/
+     * - https://stackoverflow.com/questions/8800919/how-to-generate-a-qr-code-for-an-android-application
+     * - https://stackoverflow.com/questions/30515584/qr-encode-a-string-to-image-in-android-project-using-zxing
+     */
     private FragmentShowQrCodeBinding binding;
     public final static String MESSAGE = "message";
     private static final int WHITE = 0xFFFFFFFF;
