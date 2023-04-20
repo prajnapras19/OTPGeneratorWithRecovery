@@ -49,12 +49,6 @@ public class SharedSecretToRecover {
         this.issuer = "";
         this.threshold = threshold;
 
-        // sanity check
-        // constraint: threshold <= recipients.length && recipients.length < 256
-        if (this.recipients.length < this.threshold || this.recipients.length > 255) {
-            throw new Exception("threshold must be <= number of recipients (255 at max).");
-        }
-
         // assume that encryptedSecret and sharedEncryptionKey is already encoded in base32 format
         this.encryptedSecret = encryptedSecret;
         this.sharedEncryptionKey = sharedEncryptionKey;
@@ -171,12 +165,7 @@ public class SharedSecretToRecover {
             throw new Exception("inputted string not in shared otp secret format.");
         }
 
-        // sanity check
-        // constraint: threshold <= recipients.length && recipients.length < 256
         this.threshold = Integer.valueOf(thresholdString);
-        if (this.recipients.length < this.threshold || this.recipients.length > 255) {
-            throw new Exception("inputted string not in shared otp secret format.");
-        }
     }
 
     public boolean hasSameSource(SharedSecretToRecover other) {
@@ -241,5 +230,9 @@ public class SharedSecretToRecover {
 
     public OTPURIFormat getFormat() {
         return this.format;
+    }
+
+    public int getThreshold() {
+        return this.threshold;
     }
 }

@@ -69,10 +69,14 @@ public class SharedSecret {
             parts.put(1, needToShare);
         } else {
             // split concat(iv, key) to recipients
-            // constraint (assume all has been satisfied):
+            // constraint:
             // threshold > 1
             // recipients.length >= threshold
             // recipients.length < 256
+            if (!((threshold > 1) && (recipients.length >= threshold) && (recipients.length < 256))) {
+                throw new Exception("threshold must be a number between 2 and number of recipients (255 at max).");
+            }
+
             Scheme scheme = new Scheme(new SecureRandom(), recipients.length, threshold);
             parts = scheme.split(needToShare);
         }
@@ -108,7 +112,15 @@ public class SharedSecret {
         if (recipientsLength == 1) {
             recovered = sharedSecret.get(1);
         } else {
-            Scheme scheme = new Scheme(new SecureRandom(), recipientsLength, recipientsLength);
+            // constraint:
+            // threshold > 1
+            // recipients.length >= threshold
+            // recipients.length < 256
+            if (!((pickedSharedSecretToRecover.getThreshold() > 1) && (recipientsLength >= pickedSharedSecretToRecover.getThreshold()) && (recipientsLength < 256))) {
+                throw new Exception("threshold must be a number between 2 and number of recipients (255 at max).");
+            }
+
+            Scheme scheme = new Scheme(new SecureRandom(), recipientsLength, pickedSharedSecretToRecover.getThreshold());
             recovered = scheme.join(sharedSecret);
         }
 

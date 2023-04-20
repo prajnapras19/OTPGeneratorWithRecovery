@@ -31,8 +31,14 @@
                 android:id="@+id/linear_layout_recipients_create_backup"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@+id/choice_create_backup">
+                android:layout_height="fill_parent">
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_layout_threshold_create_backup"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
             </LinearLayout>
 
             <Button
@@ -43,8 +49,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_below="@+id/linear_layout_recipients_create_backup"/>
+                app:layout_constraintStart_toStartOf="parent"/>
             <Button
                 android:id="@+id/button_submit_create_backup"
                 android:layout_width="wrap_content"
@@ -53,8 +58,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_below="@+id/button_add_recipients_create_backup"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </LinearLayout>
     </ScrollView>
