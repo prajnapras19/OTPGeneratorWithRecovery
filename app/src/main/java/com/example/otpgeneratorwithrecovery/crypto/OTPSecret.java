@@ -80,6 +80,10 @@ public class OTPSecret {
             throw new Exception("label format not recognized.");
         }
 
+        if (this.accountName.equals("")) {
+            this.accountName = "unknown";
+        }
+
         this.algorithm = "SHA1";
         this.digits = "6";
         this.period = "30";
@@ -99,7 +103,7 @@ public class OTPSecret {
     }
 
     public String getIdentifier() {
-        return format.getLabel();
+        return String.format("%s:%s", this.issuer, this.accountName);
     }
 
     public String getOTP() {
