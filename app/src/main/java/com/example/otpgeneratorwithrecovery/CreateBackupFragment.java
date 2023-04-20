@@ -181,7 +181,7 @@ public class CreateBackupFragment extends Fragment {
 
         SharedPreferences sharedPrefCreatedBackup = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefCreatedBackup.edit();
-        editor.putString(Util.getNextSharedPreferenceID(sharedPref.getAll()), String.join(".", savedSharedSecret));
+        editor.putString(Util.getNextSharedPreferenceID(sharedPref.getAll()), String.join("-", savedSharedSecret));
         editor.apply();
     }
 
