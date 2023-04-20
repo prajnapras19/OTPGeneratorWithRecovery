@@ -235,4 +235,16 @@ public class SharedSecretToRecover {
     public int getThreshold() {
         return this.threshold;
     }
+
+    public String getIssuer() {
+        return this.issuer;
+    }
+
+    public String getAccountName() {
+        return this.accountName;
+    }
+
+    public String getRecipient() {
+        return this.recipient;
+    }
 }
