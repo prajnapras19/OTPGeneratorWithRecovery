@@ -3,6 +3,7 @@ package com.example.otpgeneratorwithrecovery;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -18,8 +19,6 @@ import com.example.otpgeneratorwithrecovery.databinding.FragmentListOtpBinding;
 import com.example.otpgeneratorwithrecovery.util.Util;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ListOTPFragment  extends Fragment {
     private FragmentListOtpBinding binding;
@@ -35,17 +34,27 @@ public class ListOTPFragment  extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask(){
+        Handler refreshHandler = new Handler();
+        listOTP();
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                // TODO
+                try {
+                    listOTP();
+                    refreshHandler.postDelayed(this, 1000);
+                } catch (Exception e) {
+                    // do nothing
+                }
             }
-        }, 0, 1000);
+        };
+        refreshHandler.postDelayed(runnable, 1000);
+    }
 
+    public void listOTP() {
         SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
         Map<String, ?> otpSecrets = sharedPref.getAll();
+
+        binding.linearLayoutListOtp.removeAllViews();
 
         for (String k : Util.getSortedMapKey(otpSecrets)) {
             try {
