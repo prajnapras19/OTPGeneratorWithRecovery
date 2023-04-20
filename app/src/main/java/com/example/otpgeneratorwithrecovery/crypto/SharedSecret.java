@@ -63,9 +63,15 @@ public class SharedSecret {
             needToShare[i++] = listNeedToShare.get(i);
         }
 
-        // split concat(iv, key) to recipients
-        Scheme scheme = new Scheme(new SecureRandom(), recipients.length, recipients.length);
-        Map<Integer, byte[]> parts = scheme.split(needToShare);
+        Map<Integer, byte[]> parts;
+        if (recipients.length == 1) {
+            parts = new HashMap<>();
+            parts.put(1, needToShare);
+        } else {
+            // split concat(iv, key) to recipients
+            Scheme scheme = new Scheme(new SecureRandom(), recipients.length, recipients.length);
+            parts = scheme.split(needToShare);
+        }
 
         ArrayList<String> shares = new ArrayList<>();
         for (int i = 0; i < recipients.length; i++) {
@@ -93,8 +99,13 @@ public class SharedSecret {
             sharedSecret.put(sharedSecretToRecover.getRecipientNumber(), Base32Wrapper.decodeStringToBytes(sharedSecretToRecover.getSharedEncryptionKey()));
         }
 
-        Scheme scheme = new Scheme(new SecureRandom(), recipientsLength, recipientsLength);
-        byte[] recovered = scheme.join(sharedSecret);
+        byte[] recovered;
+        if (recipientsLength == 1) {
+            recovered = sharedSecret.get(1);
+        } else {
+            Scheme scheme = new Scheme(new SecureRandom(), recipientsLength, recipientsLength);
+            recovered = scheme.join(sharedSecret);
+        }
 
         byte[] ivBytes = Arrays.copyOfRange(recovered, 0, 16);
         byte[] keyBytes = Arrays.copyOfRange(recovered, 16, 32);
