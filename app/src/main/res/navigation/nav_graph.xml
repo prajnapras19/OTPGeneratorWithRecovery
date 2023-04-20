@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_ListOTPFragment"
             app:destination="@id/ListOTPFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_CreateBackupFragment"
+            app:destination="@id/CreateBackupFragment" />
     </fragment>
     <fragment
         android:id="@+id/OTPSecretQRCodeScannerFragment"
