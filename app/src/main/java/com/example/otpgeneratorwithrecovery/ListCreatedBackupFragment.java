@@ -9,10 +9,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.crypto.SharedSecretToRecover;
@@ -84,6 +86,23 @@ public class ListCreatedBackupFragment extends Fragment {
                     textViewRecipient.setText(String.format("    • %s", sharedSecret.getRecipient()));
                     textViewRecipient.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                     binding.linearLayoutListCreatedBackup.addView(textViewRecipient);
+
+                    Button buttonShowShareSecret = new Button(getContext());
+                    buttonShowShareSecret.setText("Show QR Code");
+                    buttonShowShareSecret.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    buttonShowShareSecret.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // https://stackoverflow.com/questions/16036572/how-to-pass-values-between-fragments
+                            Bundle bundle = new Bundle();
+                            bundle.putString(ShowQRCodeFragment.MESSAGE, sharedSecret.getFormat().toString());
+
+                            NavHostFragment.findNavController(ListCreatedBackupFragment.this)
+                                    .navigate(R.id.action_ListCreatedBackupFragment_to_ShowQRCodeFragment, bundle);
+                        }
+                    });
+
+                    binding.linearLayoutListCreatedBackup.addView(buttonShowShareSecret);
                 }
 
                 TextView divider3 = new TextView(getContext());
