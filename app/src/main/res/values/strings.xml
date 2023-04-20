@@ -2,9 +2,16 @@
     <string name="app_name">OTP GeneratorWithRecovery</string>
     <string name="first_fragment_label">OTP Generator With Recovery</string>
     <string name="otp_secret_qr_code_scanner_fragment_label">Scan OTP Secret (QR Code)</string>
+    <string name="otp_secret_manual_input_fragment_label">Input OTP Secret (manual)</string>
 
     <string name="camera_permission_rationale_title">Permission Needed For Camera</string>
     <string name="camera_permission_rationale_message">This permission is needed to scan the QR code.</string>
+
+    <string name="secret_is_required">Secret (required)</string>
+    <string name="issuer_is_optional">Issuer (optional, default: unknown)</string>
+    <string name="account_name_is_optional">Account Name (optional, default: unknown)</string>
+
+    <string name="submit">Submit</string>
 
     <string name="otp_secret_shared_preferences_file">com.example.otpgeneratorwithrecovery.otpsecret</string>
 </resources>

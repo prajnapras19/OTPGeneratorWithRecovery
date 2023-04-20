@@ -83,6 +83,9 @@ public class OTPSecret {
         if (this.accountName.equals("")) {
             this.accountName = "unknown";
         }
+        if (this.issuer.equals("")) {
+            this.issuer = "unknown";
+        }
 
         this.algorithm = "SHA1";
         this.digits = "6";

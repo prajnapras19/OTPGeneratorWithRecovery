@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_OTPSecretQRCodeScannerFragment"
             app:destination="@id/OTPSecretQRCodeScannerFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_OTPSecretManualInputFragment"
+            app:destination="@id/OTPSecretManualInputFragment" />
     </fragment>
     <fragment
         android:id="@+id/OTPSecretQRCodeScannerFragment"
@@ -21,6 +24,16 @@
 
         <action
             android:id="@+id/action_OTPSecretQRCodeScannerFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/OTPSecretManualInputFragment"
+        android:name="com.example.otpgeneratorwithrecovery.OTPSecretManualInputFragment"
+        android:label="@string/otp_secret_manual_input_fragment_label"
+        tools:layout="@layout/fragment_otp_secret_manual_inputr">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_OTPSecretManualInputFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>

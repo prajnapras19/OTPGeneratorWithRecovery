@@ -83,7 +83,6 @@ public class OTPSecretQRCodeScannerFragment extends NeedPermissionFragment imple
             alert1.show();
 
             NavHostFragment.findNavController(OTPSecretQRCodeScannerFragment.this).navigateUp();
-            return;
         } catch (Exception e) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Error");
