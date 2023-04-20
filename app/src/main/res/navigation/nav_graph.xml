@@ -37,4 +37,10 @@
         android:label="@string/list_otp_fragment_label"
         tools:layout="@layout/fragment_list_otp">
     </fragment>
+    <fragment
+        android:id="@+id/CreateBackupFragment"
+        android:name="com.example.otpgeneratorwithrecovery.CreateBackupFragment"
+        android:label="@string/create_backup_fragment_label"
+        tools:layout="@layout/fragment_create_backup">
+    </fragment>
 </navigation>
