@@ -42,7 +42,7 @@ public class SharedSecret {
         return key;
     }
 
-    public static String[] generate(OTPSecret secret, String[] recipients) throws Exception {
+    public static String[] generate(OTPSecret secret, String[] recipients, int threshold) throws Exception {
         SecretKey key = SharedSecret.generateKey(128);
         IvParameterSpec ivParameterSpec = SharedSecret.generateIv();
         String encryptedSecret = SharedSecret.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
@@ -69,7 +69,11 @@ public class SharedSecret {
             parts.put(1, needToShare);
         } else {
             // split concat(iv, key) to recipients
-            Scheme scheme = new Scheme(new SecureRandom(), recipients.length, recipients.length);
+            // constraint (assume all has been satisfied):
+            // threshold > 1
+            // recipients.length >= threshold
+            // recipients.length < 256
+            Scheme scheme = new Scheme(new SecureRandom(), recipients.length, threshold);
             parts = scheme.split(needToShare);
         }
 
@@ -81,7 +85,8 @@ public class SharedSecret {
                     i + 1,
                     recipients,
                     encryptedSecret,
-                    Base32Wrapper.encodeBytesToString(parts.get(i + 1))
+                    Base32Wrapper.encodeBytesToString(parts.get(i + 1)),
+                    threshold
             ).toString());
         }
 
@@ -121,6 +126,7 @@ public class SharedSecret {
         newParameterMap.remove(SharedSecretToRecover.RECIPIENT_NUMBER);
         newParameterMap.remove(SharedSecretToRecover.ENCRYPTED_SECRET);
         newParameterMap.remove(SharedSecretToRecover.SHARED_ENCRYPTION_KEY);
+        newParameterMap.remove(SharedSecretToRecover.THRESHOLD);
 
         // insert secret to map
         newParameterMap.put("secret", decryptedSecret);

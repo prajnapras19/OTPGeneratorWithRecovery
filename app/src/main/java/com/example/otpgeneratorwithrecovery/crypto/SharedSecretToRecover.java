@@ -15,6 +15,7 @@ public class SharedSecretToRecover {
     public static final String RECIPIENT_NUMBER = "recipientNumber";
     public static final String ENCRYPTED_SECRET = "encryptedSecret";
     public static final String SHARED_ENCRYPTION_KEY = "sharedEncryptionKey";
+    public static final String THRESHOLD = "threshold";
 
     private OTPURIFormat format;
     private String recipient;
@@ -24,6 +25,7 @@ public class SharedSecretToRecover {
     private String sharedEncryptionKey;
     private String issuer;
     private String accountName;
+    private int threshold;
 
     // TODO: refactor to remove this, because this just become a placeholder for validation
     private String type;
@@ -36,14 +38,22 @@ public class SharedSecretToRecover {
      * @param recipients
      * @param encryptedSecret
      * @param sharedEncryptionKey
+     * @param threshold
      */
-    public SharedSecretToRecover(OTPSecret secret, String recipient, int recipientNumber, String[] recipients, String encryptedSecret, String sharedEncryptionKey) throws Exception {
+    public SharedSecretToRecover(OTPSecret secret, String recipient, int recipientNumber, String[] recipients, String encryptedSecret, String sharedEncryptionKey, int threshold) throws Exception {
         this.format = secret.getFormat();
         this.recipient = recipient;
         this.recipientNumber = recipientNumber;
         this.recipients = recipients;
         this.accountName = "";
         this.issuer = "";
+        this.threshold = threshold;
+
+        // sanity check
+        // constraint: threshold <= recipients.length && recipients.length < 256
+        if (this.recipients.length < this.threshold || this.recipients.length > 255) {
+            throw new Exception("threshold must be <= number of recipients (255 at max).");
+        }
 
         // assume that encryptedSecret and sharedEncryptionKey is already encoded in base32 format
         this.encryptedSecret = encryptedSecret;
@@ -142,8 +152,9 @@ public class SharedSecretToRecover {
         String recipientsString = this.format.getParameter(SharedSecretToRecover.RECIPIENTS);
         this.encryptedSecret = this.format.getParameter(SharedSecretToRecover.ENCRYPTED_SECRET);
         this.sharedEncryptionKey = this.format.getParameter(SharedSecretToRecover.SHARED_ENCRYPTION_KEY);
+        String thresholdString = this.format.getParameter(SharedSecretToRecover.THRESHOLD);
 
-        if (this.recipient == null || recipientNumberString == null || recipientsString == null || this.encryptedSecret == null || this.sharedEncryptionKey == null) {
+        if (this.recipient == null || recipientNumberString == null || recipientsString == null || this.encryptedSecret == null || this.sharedEncryptionKey == null || thresholdString == null) {
             throw new Exception("inputted string not in shared otp secret format.");
         }
 
@@ -157,6 +168,13 @@ public class SharedSecretToRecover {
 
         // validate sharedEncryptionKey and encryptedSecret, must be base32 encoded, based on encryption and decryption in SharedSecret class
         if (Base32Wrapper.decodeStringToString(this.sharedEncryptionKey).equals("") || Base32Wrapper.decodeStringToString(this.encryptedSecret).equals("")) {
+            throw new Exception("inputted string not in shared otp secret format.");
+        }
+
+        // sanity check
+        // constraint: threshold <= recipients.length && recipients.length < 256
+        this.threshold = Integer.valueOf(thresholdString);
+        if (this.recipients.length < this.threshold || this.recipients.length > 255) {
             throw new Exception("inputted string not in shared otp secret format.");
         }
     }
@@ -200,6 +218,7 @@ public class SharedSecretToRecover {
         newParameterMap.put(SharedSecretToRecover.RECIPIENT_NUMBER, String.valueOf(this.recipientNumber));
         newParameterMap.put(SharedSecretToRecover.ENCRYPTED_SECRET, encryptedSecret);
         newParameterMap.put(SharedSecretToRecover.SHARED_ENCRYPTION_KEY, sharedEncryptionKey);
+        newParameterMap.put(SharedSecretToRecover.THRESHOLD, String.valueOf(threshold));
 
         return (new OTPURIFormat(PREFIX_SHARES, this.format.getType(), this.format.getLabel(), newParameterMap)).toString();
     }
