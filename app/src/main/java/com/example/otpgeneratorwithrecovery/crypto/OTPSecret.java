@@ -89,6 +89,11 @@ public class OTPSecret {
 
         this.algorithm = "SHA1";
         this.digits = "6";
+
+        // TODO: add support for HOTP
+        // if (this.type.equals("hotp")) {
+        //     this.period = "";
+        // }
         this.period = "30";
         this.secret = Base32Wrapper.decodeStringToHexString(this.base32EncodedSecret);
     }
@@ -128,5 +133,9 @@ public class OTPSecret {
 
     public OTPURIFormat getFormat() {
         return this.format;
+    }
+
+    public String getPeriod() {
+        return this.period;
     }
 }

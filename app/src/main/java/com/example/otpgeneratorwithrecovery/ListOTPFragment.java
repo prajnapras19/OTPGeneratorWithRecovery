@@ -18,6 +18,8 @@ import com.example.otpgeneratorwithrecovery.databinding.FragmentListOtpBinding;
 import com.example.otpgeneratorwithrecovery.util.Util;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ListOTPFragment  extends Fragment {
     private FragmentListOtpBinding binding;
@@ -34,23 +36,34 @@ public class ListOTPFragment  extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences sharedPref = getContext().getSharedPreferences(
-                getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run() {
+                // TODO
+            }
+        }, 0, 1000);
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
         Map<String, ?> otpSecrets = sharedPref.getAll();
 
         for (String k : Util.getSortedMapKey(otpSecrets)) {
             try {
-                OTPSecret otpSecret = new OTPSecret((String)otpSecrets.get(k));
+                OTPSecret otpSecret = new OTPSecret((String) otpSecrets.get(k));
                 TextView textViewOTPIdentifier = new TextView(getContext());
                 textViewOTPIdentifier.setText(otpSecret.getIdentifier());
                 textViewOTPIdentifier.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                 binding.linearLayoutListOtp.addView(textViewOTPIdentifier);
 
                 TextView textViewOTP = new TextView(getContext());
-                textViewOTP.setText(otpSecret.getIdentifier());
                 textViewOTP.setText(otpSecret.getOTP());
                 textViewOTP.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
                 binding.linearLayoutListOtp.addView(textViewOTP);
+
+                TextView textViewOTPRemainingTime = new TextView(getContext());
+                textViewOTPRemainingTime.setText(String.format("Time remaining until next OTP: %s seconds", Util.getRemainingOTPTime(otpSecret.getPeriod())));
+                textViewOTPRemainingTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                binding.linearLayoutListOtp.addView(textViewOTPRemainingTime);
 
                 TextView divider = new TextView(getContext());
                 divider.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);

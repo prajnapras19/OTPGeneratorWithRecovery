@@ -30,4 +30,16 @@ public class Util {
         }
         return res;
     }
+
+    public static String getRemainingOTPTime(String period) {
+        if (period.equals("")) {
+            return "-";
+        }
+
+        long now = System.currentTimeMillis() / 1000L;
+        long x = Long.parseLong(period);
+        long time = now / x;
+
+        return String.valueOf(x - (now - time * x));
+    }
 }
