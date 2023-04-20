@@ -1,6 +1,7 @@
 package com.example.otpgeneratorwithrecovery;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,8 +15,12 @@ import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.crypto.OTPSecret;
+import com.example.otpgeneratorwithrecovery.crypto.OTPURIFormat;
+import com.example.otpgeneratorwithrecovery.crypto.SharedSecret;
 import com.example.otpgeneratorwithrecovery.databinding.FragmentCreateBackupBinding;
 import com.example.otpgeneratorwithrecovery.util.Util;
 
@@ -89,21 +94,95 @@ public class CreateBackupFragment extends Fragment {
         binding.buttonSubmitCreateBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                if (isValid()) {
+                    try {
+                        saveBackup();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Success");
+                        builder.setMessage("Backup created successfully.");
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        NavHostFragment.findNavController(CreateBackupFragment.this).navigateUp();
+                    } catch (Exception e) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Error");
+                        builder.setMessage(e.getMessage());
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    return;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Error");
+                builder.setMessage("All recipients must be filled and secret must be chosen, please try again.");
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
     }
 
-    public boolean validate() {
-        // TODO
-        /*
-        boolean someFieldsAreEmpty = binding.choiceCreateShares.getSelectedItem().toString().equals(getResources().getString(R.string.choose_secret));
-        for (int i = 0; i < binding.recipientsLinearLayout.getChildCount(); i++) {
-            someFieldsAreEmpty |= ((EditText)binding.recipientsLinearLayout.getChildAt(i)).getText().toString().equals("");
+    public boolean isValid() {
+        boolean someFieldsAreEmpty = binding.choiceCreateBackup.getSelectedItem().toString().equals(CreateBackupFragment.CHOOSE_SECRET);
+        for (int i = 0; i < binding.linearLayoutRecipientsCreateBackup.getChildCount(); i++) {
+            someFieldsAreEmpty |= ((EditText)binding.linearLayoutRecipientsCreateBackup.getChildAt(i)).getText().toString().equals("");
         }
         return !someFieldsAreEmpty;
-         */
-        return true;
+    }
+
+    public void saveBackup() throws Exception {
+        int otpSecretNumber = Integer.valueOf(binding.choiceCreateBackup.getSelectedItem().toString().split(". ")[0]);
+        OTPSecret otpSecret = null;
+        SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
+        Map<String, ?> otpSecrets = sharedPref.getAll();
+        int j = 1;
+        for (String k : Util.getSortedMapKey(otpSecrets)) {
+            try {
+                OTPSecret tmp = new OTPSecret((String)otpSecrets.get(k));
+                if (j == otpSecretNumber) {
+                    otpSecret = tmp;
+                    break;
+                }
+                j++;
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
+        // sanity check
+        if (otpSecret == null) {
+            throw new Exception("OTP secret not found.");
+        }
+
+        // parse recipients
+        String[] recipients = new String[binding.linearLayoutRecipientsCreateBackup.getChildCount()];
+        for (int i = 0; i < binding.linearLayoutRecipientsCreateBackup.getChildCount(); i++) {
+            recipients[i] = ((EditText)binding.linearLayoutRecipientsCreateBackup.getChildAt(i)).getText().toString();
+        }
+
+        // parse threshold
+        int threshold = 0;
+        if (recipients.length > 1) {
+            String thresholdString = ((EditText)binding.linearLayoutThresholdCreateBackup.getChildAt(0)).getText().toString();
+            if (thresholdString.equals("")) {
+                threshold = recipients.length;
+            } else {
+                threshold = Integer.valueOf(thresholdString);
+            }
+        }
+
+        // share secret
+        String[] sharedSecret = SharedSecret.generate(otpSecret, recipients, threshold);
+
+        // encode for saving
+        String[] savedSharedSecret = new String[sharedSecret.length];
+        for (int i = 0; i < sharedSecret.length; i++) {
+            savedSharedSecret[i] = Base32Wrapper.encodeStringToString(sharedSecret[i]);
+        }
+
+        SharedPreferences sharedPrefCreatedBackup = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefCreatedBackup.edit();
+        editor.putString(Util.getNextSharedPreferenceID(sharedPref.getAll()), String.join(".", savedSharedSecret));
+        editor.apply();
     }
 
     @Override

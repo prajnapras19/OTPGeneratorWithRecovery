@@ -17,4 +17,5 @@
     <string name="submit">Submit</string>
 
     <string name="otp_secret_shared_preferences_file">com.example.otpgeneratorwithrecovery.otpsecret</string>
+    <string name="created_backup_shared_preferences_file">com.example.otpgeneratorwithrecovery.createdbackup</string>
 </resources>
