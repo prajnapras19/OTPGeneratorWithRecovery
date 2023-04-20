@@ -22,7 +22,7 @@
             android:id="@+id/action_FirstFragment_to_CreateBackupFragment"
             app:destination="@id/CreateBackupFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_ListCreatedBackup"
+            android:id="@+id/action_FirstFragment_to_ListCreatedBackupFragment"
             app:destination="@id/ListCreatedBackupFragment" />
     </fragment>
     <fragment
@@ -54,5 +54,14 @@
         android:name="com.example.otpgeneratorwithrecovery.ListCreatedBackupFragment"
         android:label="@string/list_created_backup_fragment_label"
         tools:layout="@layout/fragment_list_created_backup">
+        <action
+            android:id="@+id/action_ListCreatedBackup_to_ShowQRCode"
+            app:destination="@id/ShowQRCodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ShowQRCodeFragment"
+        android:name="com.example.otpgeneratorwithrecovery.ShowQRCodeFragment"
+        android:label="@string/qr_code"
+        tools:layout="@layout/fragment_show_qr_code">
     </fragment>
 </navigation>
