@@ -160,7 +160,7 @@ public class CreateBackupFragment extends Fragment {
         }
 
         // parse threshold
-        int threshold = 0;
+        int threshold = 1;
         if (recipients.length > 1) {
             String thresholdString = ((EditText)binding.linearLayoutThresholdCreateBackup.getChildAt(0)).getText().toString();
             if (thresholdString.equals("")) {
