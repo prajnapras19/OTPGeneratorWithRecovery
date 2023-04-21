@@ -3,9 +3,11 @@ package com.example.otpgeneratorwithrecovery;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,6 +73,40 @@ public class ListCreatedBackupFragment extends Fragment {
                 textViewThreshold.setText(String.format("Minimum number of backup needed to recover: %d", pickedSharedSecret.getThreshold()));
                 textViewThreshold.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                 binding.linearLayoutListCreatedBackup.addView(textViewThreshold);
+
+                Button buttonDeleteBackup = new Button(getContext());
+                buttonDeleteBackup.setText("Delete");
+                buttonDeleteBackup.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                buttonDeleteBackup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                        alert.setTitle("Delete");
+                        alert.setMessage("Are you sure you want to delete this backup?");
+                        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.remove(k);
+                                editor.apply();
+                                dialog.dismiss();
+                            }
+                        });
+
+                        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        alert.show();
+                    }
+                });
+                binding.linearLayoutListCreatedBackup.addView(buttonDeleteBackup);
 
                 TextView divider = new TextView(getContext());
                 divider.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
