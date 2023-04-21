@@ -60,7 +60,6 @@ public class SharedSecret {
         for (int i = 0; i < keyBytes.length; i++) {
             needToShare[i + iv.length] = keyBytes[i];
         }
-        System.out.println("yang jadi needToShare (hex): " + Hex.encodeHexString(needToShare));
 
         Map<Integer, byte[]> parts;
         if (recipients.length == 1) {
@@ -78,11 +77,6 @@ public class SharedSecret {
 
             Scheme scheme = new Scheme(new SecureRandom(), recipients.length, threshold);
             parts = scheme.split(needToShare);
-
-            // debug join
-            Scheme scheme2 = new Scheme(new SecureRandom(), recipients.length, threshold);
-            byte[] joined = scheme2.join(parts);
-            System.out.println("yang di-join (hex): " + Hex.encodeHexString(joined));
         }
 
         // random uid
@@ -164,26 +158,16 @@ public class SharedSecret {
     }
 
     public static String encrypt(String input, SecretKey key, IvParameterSpec iv) throws Exception {
-        System.out.println("yang mau di-encrypt: " + input);
-        System.out.println("yang jadi key (hex): " + Hex.encodeHexString(key.getEncoded()));
-        System.out.println("yang jadi iv (hex): " + Hex.encodeHexString(iv.getIV()));
-
         Cipher cipher = Cipher.getInstance(encryption);
         cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         byte[] cipherText = cipher.doFinal(input.getBytes());
-
-        System.out.println("yang jadi hasil enkripsi (base32): " + Base32Wrapper.encodeBytesToString(cipherText));
         return Base32Wrapper.encodeBytesToString(cipherText);
     }
 
     public static String decrypt(String base32EncodedCipherText, SecretKey key, IvParameterSpec iv) throws Exception {
-        System.out.println("yang mau di-decrypt: " + base32EncodedCipherText);
-        System.out.println("yang jadi key (hex): " + Hex.encodeHexString(key.getEncoded()));
-        System.out.println("yang jadi iv (hex): " + Hex.encodeHexString(iv.getIV()));
         Cipher cipher = Cipher.getInstance(encryption);
         cipher.init(Cipher.DECRYPT_MODE, key, iv);
         byte[] decrypted = cipher.doFinal(Base32Wrapper.decodeStringToBytes(base32EncodedCipherText));
-        System.out.println("yang jadi hasil dekripsi: " + new String(decrypted, StandardCharsets.UTF_8));
         return new String(decrypted, StandardCharsets.UTF_8);
     }
 }
