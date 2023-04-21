@@ -105,6 +105,9 @@ public class SharedSecret {
 
         for (String s : shares) {
             SharedSecretToRecover sharedSecretToRecover = new SharedSecretToRecover(s);
+            if (pickedSharedSecretToRecover.hasSameSource(sharedSecretToRecover)) {
+                throw new Exception("the given backups doesn't belong to the same OTP.");
+            }
             sharedSecret.put(sharedSecretToRecover.getRecipientNumber(), Base32Wrapper.decodeStringToBytes(sharedSecretToRecover.getSharedEncryptionKey()));
         }
 
@@ -118,6 +121,10 @@ public class SharedSecret {
             // recipients.length < 256
             if (!((pickedSharedSecretToRecover.getThreshold() > 1) && (recipientsLength >= pickedSharedSecretToRecover.getThreshold()) && (recipientsLength < 256))) {
                 throw new Exception("threshold must be a number between 2 and number of recipients (255 at max).");
+            }
+
+            if (recipientsLength < pickedSharedSecretToRecover.getThreshold()) {
+                throw new Exception("recipients count is lower than threshold, recovery cannot be done.");
             }
 
             Scheme scheme = new Scheme(new SecureRandom(), recipientsLength, pickedSharedSecretToRecover.getThreshold());
