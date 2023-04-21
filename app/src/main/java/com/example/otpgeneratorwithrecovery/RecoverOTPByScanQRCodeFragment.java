@@ -112,10 +112,7 @@ public class RecoverOTPByScanQRCodeFragment extends NeedPermissionFragment imple
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     public void listSharedSecrets() {
         binding.linearLayoutListScanned.removeAllViews();
-        Log.v("RecoverOTPByScanQRCodeFragment", "masuk 1");
-
         if (sharedSecrets.size() == 0) {
-            Log.v("RecoverOTPByScanQRCodeFragment", "masuk 2");
             TextView textViewNoBackupScanned = new TextView(getContext());
             textViewNoBackupScanned.setText("No shared backup scanned. Try to scan a QR code of a backup.");
             textViewNoBackupScanned.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
@@ -123,7 +120,6 @@ public class RecoverOTPByScanQRCodeFragment extends NeedPermissionFragment imple
             return;
         }
 
-        Log.v("RecoverOTPByScanQRCodeFragment", "masuk 3");
         SharedSecretToRecover pickedSharedSecret = sharedSecrets.entrySet().iterator().next().getValue();
         if (sharedSecrets.size() >= pickedSharedSecret.getThreshold()) {
             // TODO: recover and navigate up
@@ -148,16 +144,17 @@ public class RecoverOTPByScanQRCodeFragment extends NeedPermissionFragment imple
         divider.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         binding.linearLayoutListScanned.addView(divider);
 
+        String[] recipients = pickedSharedSecret.getRecipients();
+
         TextView textViewRecipients = new TextView(getContext());
-        textViewRecipients.setText(String.format("Recipients (%d / %d scanned):", sharedSecrets.size(), pickedSharedSecret.getRecipients()));
+        textViewRecipients.setText(String.format("Recipients (%d / %d scanned):", sharedSecrets.size(), recipients.length));
         textViewRecipients.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         binding.linearLayoutListScanned.addView(textViewRecipients);
 
-        String[] recipients = pickedSharedSecret.getRecipients();
         for (int i = 0; i < recipients.length; i++) {
             String recipient = String.format("    • %s", recipients[i]);
             if (sharedSecrets.get(i + 1) != null) {
-                recipient = String.format("%s (received)", recipient);
+                recipient = String.format("%s (scanned)", recipient);
             }
 
             TextView textViewRecipient = new TextView(getContext());
