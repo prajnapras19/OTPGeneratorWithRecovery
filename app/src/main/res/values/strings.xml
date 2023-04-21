@@ -20,6 +20,7 @@
     <string name="account_name_is_optional">Account Name (optional, default: unknown)</string>
     <string name="backup_is_required">Backup (required)</string>
 
+    <string name="add">Add</string>
     <string name="add_recipient">Add Recipient</string>
     <string name="submit">Submit</string>
     <string name="qr_code">QR Code</string>
