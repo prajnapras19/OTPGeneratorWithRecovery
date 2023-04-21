@@ -90,5 +90,8 @@
         android:name="com.example.otpgeneratorwithrecovery.ListSharedBackupFragment"
         android:label="@string/list_shared_backup_fragment_label"
         tools:layout="@layout/fragment_list_shared_backup">
+        <action
+            android:id="@+id/action_ListSharedBackupFragment_to_ShowQRCodeFragment"
+            app:destination="@id/ShowQRCodeFragment" />
     </fragment>
 </navigation>
