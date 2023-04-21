@@ -81,6 +81,14 @@ public class FirstFragment extends Fragment {
                         .navigate(R.id.action_FirstFragment_to_SaveSharedBackupManualInputFragment);
             }
         });
+
+        binding.buttonFirstToListSharedBackup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_ListSharedBackupFragment);
+            }
+        });
     }
 
     @Override
