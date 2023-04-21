@@ -158,16 +158,26 @@ public class SharedSecret {
     }
 
     public static String encrypt(String input, SecretKey key, IvParameterSpec iv) throws Exception {
+        System.out.println("yang mau di-encrypt: " + input);
+        System.out.println("yang jadi key (hex): " + Hex.encodeHexString(key.getEncoded()));
+        System.out.println("yang jadi iv (hex): " + Hex.encodeHexString(iv.getIV()));
+
         Cipher cipher = Cipher.getInstance(encryption);
         cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         byte[] cipherText = cipher.doFinal(input.getBytes());
+
+        System.out.println("yang jadi hasil enkripsi (base32): " + Hex.encodeHexString(cipherText));
         return Base32Wrapper.encodeBytesToString(cipherText);
     }
 
     public static String decrypt(String base32EncodedCipherText, SecretKey key, IvParameterSpec iv) throws Exception {
+        System.out.println("yang mau di-decrypt: " + base32EncodedCipherText);
+        System.out.println("yang jadi key (hex): " + Hex.encodeHexString(key.getEncoded()));
+        System.out.println("yang jadi iv (hex): " + Hex.encodeHexString(iv.getIV()));
         Cipher cipher = Cipher.getInstance(encryption);
         cipher.init(Cipher.DECRYPT_MODE, key, iv);
         byte[] decrypted = cipher.doFinal(Base32Wrapper.decodeStringToBytes(base32EncodedCipherText));
+        System.out.println("yang jadi hasil dekripsi: " + new String(decrypted, StandardCharsets.UTF_8));
         return new String(decrypted, StandardCharsets.UTF_8);
     }
 }
