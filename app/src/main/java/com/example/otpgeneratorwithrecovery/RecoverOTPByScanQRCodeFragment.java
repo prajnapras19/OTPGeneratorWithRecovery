@@ -3,6 +3,8 @@ package com.example.otpgeneratorwithrecovery;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.otpgeneratorwithrecovery.crypto.OTPSecret;
+import com.example.otpgeneratorwithrecovery.crypto.SharedSecret;
 import com.example.otpgeneratorwithrecovery.crypto.SharedSecretToRecover;
 import com.example.otpgeneratorwithrecovery.databinding.FragmentRecoverOtpByScanQrCodeBinding;
 import com.example.otpgeneratorwithrecovery.permissionlistener.AskForPermissionBackgroundThreadPermissionListener;
@@ -24,6 +29,7 @@ import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +64,6 @@ public class RecoverOTPByScanQRCodeFragment extends NeedPermissionFragment imple
                     listSharedSecrets();
                     refreshHandler.postDelayed(this, 1000);
                 } catch (Exception e) {
-                    Log.v("RecoverOTPByScanQRCodeFragment", e.getMessage());
                     // do nothing
                 }
             }
@@ -122,7 +127,33 @@ public class RecoverOTPByScanQRCodeFragment extends NeedPermissionFragment imple
 
         SharedSecretToRecover pickedSharedSecret = sharedSecrets.entrySet().iterator().next().getValue();
         if (sharedSecrets.size() >= pickedSharedSecret.getThreshold()) {
-            // TODO: recover and navigate up
+            try {
+                ArrayList<String> shares = new ArrayList<>();
+                for (Map.Entry<Integer,SharedSecretToRecover> entry : sharedSecrets.entrySet()) {
+                    shares.add(entry.getValue().toString());
+                }
+
+                OTPSecret otpSecret = SharedSecret.recover(shares.toArray(new String[0]));
+
+                SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(Util.getNextSharedPreferenceID(sharedPref.getAll()), otpSecret.getFormat().toString());
+                editor.apply();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Success");
+                builder.setMessage("OTP recovered successfully for " + otpSecret.getIdentifier());
+                AlertDialog alert = builder.create();
+                alert.show();
+            } catch (Exception e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Error");
+                builder.setMessage(e.getMessage());
+                AlertDialog alert1 = builder.create();
+                alert1.show();
+            }
+            NavHostFragment.findNavController(RecoverOTPByScanQRCodeFragment.this).navigateUp();
+            return;
         }
 
         TextView textViewOTPIdentifier = new TextView(getContext());
