@@ -123,7 +123,7 @@ public class SharedSecret {
                 throw new Exception("threshold must be a number between 2 and number of recipients (255 at max).");
             }
 
-            if (recipientsLength < pickedSharedSecretToRecover.getThreshold()) {
+            if (sharedSecret.size() < pickedSharedSecretToRecover.getThreshold()) {
                 throw new Exception("recipients count is lower than threshold, recovery cannot be done.");
             }
 
