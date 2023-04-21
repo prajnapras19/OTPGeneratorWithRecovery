@@ -189,6 +189,10 @@ public class SharedSecretToRecover {
             return false;
         }
 
+        if (this.threshold != other.threshold) {
+            return false;
+        }
+
         for (int i = 0; i < this.recipients.length; i++) {
             if (!recipients[i].equals(other.recipients[i])) {
                 return false;
