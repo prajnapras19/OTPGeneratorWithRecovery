@@ -110,7 +110,7 @@ public class SharedSecret {
 
         for (String s : shares) {
             SharedSecretToRecover sharedSecretToRecover = new SharedSecretToRecover(s);
-            if (pickedSharedSecretToRecover.hasSameSource(sharedSecretToRecover)) {
+            if (!pickedSharedSecretToRecover.hasSameSource(sharedSecretToRecover)) {
                 throw new Exception("the given backups doesn't belong to the same OTP.");
             }
             sharedSecret.put(sharedSecretToRecover.getRecipientNumber(), Base32Wrapper.decodeStringToBytes(sharedSecretToRecover.getSharedEncryptionKey()));
