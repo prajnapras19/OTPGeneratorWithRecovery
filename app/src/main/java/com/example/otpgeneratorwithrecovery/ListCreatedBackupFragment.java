@@ -88,6 +88,11 @@ public class ListCreatedBackupFragment extends Fragment {
                 textViewOTPIdentifier.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                 binding.linearLayoutListCreatedBackup.addView(textViewOTPIdentifier);
 
+                TextView textViewUID = new TextView(getContext());
+                textViewUID.setText(String.format("Unique ID: %s", pickedSharedSecret.getUID()));
+                textViewUID.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                binding.linearLayoutListCreatedBackup.addView(textViewUID);
+
                 TextView textViewThreshold = new TextView(getContext());
                 textViewThreshold.setText(String.format("Minimum number of backup needed to recover: %d", pickedSharedSecret.getThreshold()));
                 textViewThreshold.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
