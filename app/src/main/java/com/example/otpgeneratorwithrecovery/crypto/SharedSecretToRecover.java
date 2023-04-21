@@ -16,8 +16,10 @@ public class SharedSecretToRecover {
     public static final String ENCRYPTED_SECRET = "encryptedSecret";
     public static final String SHARED_ENCRYPTION_KEY = "sharedEncryptionKey";
     public static final String THRESHOLD = "threshold";
+    public static final String UID = "uid";
 
     private OTPURIFormat format;
+    private String uid;
     private String recipient;
     private int recipientNumber; // 1-based
     private String[] recipients;
@@ -40,7 +42,7 @@ public class SharedSecretToRecover {
      * @param sharedEncryptionKey
      * @param threshold
      */
-    public SharedSecretToRecover(OTPSecret secret, String recipient, int recipientNumber, String[] recipients, String encryptedSecret, String sharedEncryptionKey, int threshold) throws Exception {
+    public SharedSecretToRecover(OTPSecret secret, String recipient, int recipientNumber, String[] recipients, String encryptedSecret, String sharedEncryptionKey, int threshold, String uid) throws Exception {
         this.format = secret.getFormat();
         this.recipient = recipient;
         this.recipientNumber = recipientNumber;
@@ -48,6 +50,7 @@ public class SharedSecretToRecover {
         this.accountName = "";
         this.issuer = "";
         this.threshold = threshold;
+        this.uid = uid;
 
         // assume that encryptedSecret and sharedEncryptionKey is already encoded in base32 format
         this.encryptedSecret = encryptedSecret;
@@ -147,8 +150,9 @@ public class SharedSecretToRecover {
         this.encryptedSecret = this.format.getParameter(SharedSecretToRecover.ENCRYPTED_SECRET);
         this.sharedEncryptionKey = this.format.getParameter(SharedSecretToRecover.SHARED_ENCRYPTION_KEY);
         String thresholdString = this.format.getParameter(SharedSecretToRecover.THRESHOLD);
+        this.uid = this.format.getParameter(SharedSecretToRecover.UID);
 
-        if (this.recipient == null || recipientNumberString == null || recipientsString == null || this.encryptedSecret == null || this.sharedEncryptionKey == null || thresholdString == null) {
+        if (this.recipient == null || recipientNumberString == null || recipientsString == null || this.encryptedSecret == null || this.sharedEncryptionKey == null || thresholdString == null || this.uid == null) {
             throw new Exception("inputted string not in shared otp secret format.");
         }
 
@@ -201,13 +205,14 @@ public class SharedSecretToRecover {
         // omit secret
         newParameterMap.remove("secret");
 
-        // insert recipient, recipients, recipientNumber, encryptedSecret, and sharedEncryptionKey
+        // insert parameters
         newParameterMap.put(SharedSecretToRecover.RECIPIENT, this.recipient);
         newParameterMap.put(SharedSecretToRecover.RECIPIENTS, String.join(",", this.recipients));
         newParameterMap.put(SharedSecretToRecover.RECIPIENT_NUMBER, String.valueOf(this.recipientNumber));
         newParameterMap.put(SharedSecretToRecover.ENCRYPTED_SECRET, encryptedSecret);
         newParameterMap.put(SharedSecretToRecover.SHARED_ENCRYPTION_KEY, sharedEncryptionKey);
         newParameterMap.put(SharedSecretToRecover.THRESHOLD, String.valueOf(threshold));
+        newParameterMap.put(SharedSecretToRecover.UID, this.uid);
 
         return (new OTPURIFormat(PREFIX_SHARES, this.format.getType(), this.format.getLabel(), newParameterMap)).toString();
     }
@@ -246,5 +251,9 @@ public class SharedSecretToRecover {
 
     public String getRecipient() {
         return this.recipient;
+    }
+
+    public String getUID() {
+        return this.uid;
     }
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -81,6 +82,9 @@ public class SharedSecret {
             parts = scheme.split(needToShare);
         }
 
+        // random uid
+        UUID uid = UUID.randomUUID();
+
         ArrayList<String> shares = new ArrayList<>();
         for (int i = 0; i < recipients.length; i++) {
             shares.add(new SharedSecretToRecover(
@@ -90,7 +94,8 @@ public class SharedSecret {
                     recipients,
                     encryptedSecret,
                     Base32Wrapper.encodeBytesToString(parts.get(i + 1)),
-                    threshold
+                    threshold,
+                    uid.toString()
             ).toString());
         }
 
@@ -146,6 +151,7 @@ public class SharedSecret {
         newParameterMap.remove(SharedSecretToRecover.ENCRYPTED_SECRET);
         newParameterMap.remove(SharedSecretToRecover.SHARED_ENCRYPTION_KEY);
         newParameterMap.remove(SharedSecretToRecover.THRESHOLD);
+        newParameterMap.remove(SharedSecretToRecover.UID);
 
         // insert secret to map
         newParameterMap.put("secret", decryptedSecret);
