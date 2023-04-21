@@ -1,6 +1,15 @@
 package com.example.otpgeneratorwithrecovery.util;
 
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.WHITE;
+
+import android.graphics.Bitmap;
+
 import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,5 +56,28 @@ public class Util {
 
     public static String getBeautifiedBackup(String backup) {
         return String.format("Hello, I am using OTP Generator With Recovery (https://github.com/prajnapras19/OTPGeneratorWithRecovery) and I need your help to save my backup in your application. You can input this in the application:\n\n%s\n\nThank you in advance!", Base32Wrapper.encodeStringToString(backup));
+    }
+
+    public static Bitmap getQRCode(String str, int width) throws WriterException {
+        BitMatrix result;
+        try {
+            result = new MultiFormatWriter().encode(str,
+                    BarcodeFormat.QR_CODE, width, width, null);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
+        int w = result.getWidth();
+        int h = result.getHeight();
+        int[] pixels = new int[w * h];
+        for (int y = 0; y < h; y++) {
+            int offset = y * w;
+            for (int x = 0; x < w; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, w, h);
+        return bitmap;
     }
 }
