@@ -7,6 +7,7 @@
     <string name="create_backup_fragment_label">Create Backup</string>
     <string name="list_created_backup_fragment_label">List Created Backup</string>
     <string name="save_shared_backup_qr_code">Save Shared Backup (QR Code)</string>
+    <string name="save_shared_backup_manual_input">Save Shared Backup (manual)</string>
 
     <string name="camera_permission_rationale_title">Permission Needed For Camera</string>
     <string name="camera_permission_rationale_message">This permission is needed to scan the QR code.</string>
@@ -14,6 +15,7 @@
     <string name="secret_is_required">Secret (required)</string>
     <string name="issuer_is_optional">Issuer (optional, default: unknown)</string>
     <string name="account_name_is_optional">Account Name (optional, default: unknown)</string>
+    <string name="backup_is_required">Backup (required)</string>
 
     <string name="add_recipient">Add Recipient</string>
     <string name="submit">Submit</string>
