@@ -42,6 +42,6 @@ public class Base32Wrapper {
     }
 
     public static byte[] decodeStringToBytes(String encoded) {
-        return (new Base32()).encode(encoded.getBytes(StandardCharsets.UTF_8));
+        return (new Base32()).decode(encoded.getBytes(StandardCharsets.UTF_8));
     }
 }
