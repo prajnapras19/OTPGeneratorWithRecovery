@@ -127,6 +127,7 @@ public class RecoverOTPByScanQRCodeFragment extends NeedPermissionFragment imple
 
         SharedSecretToRecover pickedSharedSecret = sharedSecrets.entrySet().iterator().next().getValue();
         if (sharedSecrets.size() >= pickedSharedSecret.getThreshold()) {
+            mScannerView.stopCamera();
             try {
                 ArrayList<String> shares = new ArrayList<>();
                 for (Map.Entry<Integer,SharedSecretToRecover> entry : sharedSecrets.entrySet()) {
