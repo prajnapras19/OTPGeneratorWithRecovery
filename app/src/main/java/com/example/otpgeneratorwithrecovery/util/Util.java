@@ -54,8 +54,8 @@ public class Util {
         return String.valueOf(x - (now - time * x));
     }
 
-    public static String getBeautifiedBackup(String backup) {
-        return String.format("Hello, I am using OTP Generator With Recovery (https://github.com/prajnapras19/OTPGeneratorWithRecovery) and I need your help to save my backup in your application. You can input this in the application:\n\n%s\n\nThank you in advance!", Base32Wrapper.encodeStringToString(backup));
+    public static String getBeautifiedBackup(String recipient, String backup) {
+        return String.format("Hello %s, I am using OTP Generator With Recovery (https://github.com/prajnapras19/OTPGeneratorWithRecovery) and I need your help to save my backup in your application. You can input this in the application:\n\n%s\n\nThank you in advance!", recipient, Base32Wrapper.encodeStringToString(backup));
     }
 
     public static Bitmap getQRCode(String str, int width) throws WriterException {

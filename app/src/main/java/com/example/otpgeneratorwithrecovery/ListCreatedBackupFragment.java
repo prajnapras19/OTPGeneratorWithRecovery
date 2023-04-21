@@ -175,7 +175,7 @@ public class ListCreatedBackupFragment extends Fragment {
                         public void onClick(View view) {
                             // https://stackoverflow.com/questions/19253786/how-to-copy-text-to-clip-board-in-android
                             ClipboardManager clipboard = (ClipboardManager) getSystemService(getContext(), ClipboardManager.class);
-                            ClipData clip = ClipData.newPlainText("copy_of_backup", Util.getBeautifiedBackup(sharedSecret.getFormat().toString()));
+                            ClipData clip = ClipData.newPlainText("copy_of_backup", Util.getBeautifiedBackup(sharedSecret.getRecipient(), sharedSecret.getFormat().toString()));
                             clipboard.setPrimaryClip(clip);
                         }
                     });
