@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -46,12 +47,30 @@ public class ListCreatedBackupFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Handler refreshHandler = new Handler();
+        listCreatedBackup();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    listCreatedBackup();
+                    refreshHandler.postDelayed(this, 1000);
+                } catch (Exception e) {
+                    // do nothing
+                }
+            }
+        };
+        refreshHandler.postDelayed(runnable, 1000);
+    }
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    public void listCreatedBackup() {
         SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
         Map<String, ?> createdBackups = sharedPref.getAll();
+
+        binding.linearLayoutListCreatedBackup.removeAllViews();
 
         int i = 1;
         for (String k : Util.getSortedMapKey(createdBackups)) {
