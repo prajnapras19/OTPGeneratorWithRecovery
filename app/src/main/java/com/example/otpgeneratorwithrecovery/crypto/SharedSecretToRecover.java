@@ -173,6 +173,10 @@ public class SharedSecretToRecover {
     }
 
     public boolean hasSameSource(SharedSecretToRecover other) {
+        if (!this.getUID().equals(other.getUID())) {
+            return false;
+        }
+
         if (!this.format.getLabel().equals(other.format.getLabel())) {
             return false;
         }
