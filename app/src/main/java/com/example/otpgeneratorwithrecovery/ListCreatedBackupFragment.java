@@ -90,7 +90,7 @@ public class ListCreatedBackupFragment extends Fragment {
 
                 TextView textViewThreshold = new TextView(getContext());
                 textViewThreshold.setText(String.format("Minimum number of backup needed to recover: %d", pickedSharedSecret.getThreshold()));
-                textViewThreshold.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                textViewThreshold.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 binding.linearLayoutListCreatedBackup.addView(textViewThreshold);
 
                 Button buttonDeleteBackup = new Button(getContext());
@@ -148,7 +148,7 @@ public class ListCreatedBackupFragment extends Fragment {
 
                     Button buttonShowShareSecret = new Button(getContext());
                     buttonShowShareSecret.setText("Show QR Code");
-                    buttonShowShareSecret.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    buttonShowShareSecret.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     buttonShowShareSecret.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -164,7 +164,7 @@ public class ListCreatedBackupFragment extends Fragment {
 
                     Button buttonCopyToClipboard = new Button(getContext());
                     buttonCopyToClipboard.setText("Copy To Clipboard");
-                    buttonCopyToClipboard.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    buttonCopyToClipboard.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     buttonCopyToClipboard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -178,7 +178,7 @@ public class ListCreatedBackupFragment extends Fragment {
                 }
 
                 TextView divider3 = new TextView(getContext());
-                divider3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                divider3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
                 binding.linearLayoutListCreatedBackup.addView(divider3);
                 i++;
             } catch (Exception e) {
