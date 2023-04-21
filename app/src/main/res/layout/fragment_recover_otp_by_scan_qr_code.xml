@@ -6,11 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".RecoverOTPByScanQRCodeFragment">
 
-    <FrameLayout
-        android:id="@+id/frame_layout_camera"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent">
+
+        <FrameLayout
+            android:id="@+id/frame_layout_camera"
+            android:layout_width="match_parent"
+            android:layout_height="443dp" />
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="60dp">
+            <LinearLayout
+                android:id="@+id/linear_layout_list_scanned"
+                android:layout_width="409dp"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="1dp"
+                tools:layout_editor_absoluteY="1dp"></LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
