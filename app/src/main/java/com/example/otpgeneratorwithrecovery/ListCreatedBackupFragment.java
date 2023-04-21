@@ -1,6 +1,10 @@
 package com.example.otpgeneratorwithrecovery;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -101,12 +105,25 @@ public class ListCreatedBackupFragment extends Fragment {
                                     .navigate(R.id.action_ListCreatedBackupFragment_to_ShowQRCodeFragment, bundle);
                         }
                     });
-
                     binding.linearLayoutListCreatedBackup.addView(buttonShowShareSecret);
+
+                    Button buttonCopyToClipboard = new Button(getContext());
+                    buttonCopyToClipboard.setText("Copy To Clipboard");
+                    buttonCopyToClipboard.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    buttonCopyToClipboard.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // https://stackoverflow.com/questions/19253786/how-to-copy-text-to-clip-board-in-android
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(getContext(), ClipboardManager.class);
+                            ClipData clip = ClipData.newPlainText("copy_of_backup", Util.getBeautifiedBackup(sharedSecret.getFormat().toString()));
+                            clipboard.setPrimaryClip(clip);
+                        }
+                    });
+                    binding.linearLayoutListCreatedBackup.addView(buttonCopyToClipboard);
                 }
 
                 TextView divider3 = new TextView(getContext());
-                divider3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                divider3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 binding.linearLayoutListCreatedBackup.addView(divider3);
                 i++;
             } catch (Exception e) {

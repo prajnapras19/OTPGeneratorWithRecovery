@@ -1,5 +1,7 @@
 package com.example.otpgeneratorwithrecovery.util;
 
+import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,5 +43,9 @@ public class Util {
         long time = now / x;
 
         return String.valueOf(x - (now - time * x));
+    }
+
+    public static String getBeautifiedBackup(String backup) {
+        return String.format("Hello, I am using OTP Generator With Recovery (https://github.com/prajnapras19/OTPGeneratorWithRecovery) and I need your help to save my backup in your application. You can input this in the application:\n\n%s\n\nThank you in advance!", Base32Wrapper.encodeStringToString(backup));
     }
 }
