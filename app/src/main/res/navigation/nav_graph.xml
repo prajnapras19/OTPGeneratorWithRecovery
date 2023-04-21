@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_ListCreatedBackupFragment"
             app:destination="@id/ListCreatedBackupFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_SaveSharedBackupQRCodeFragment"
+            app:destination="@id/SaveSharedBackupQRCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/OTPSecretQRCodeScannerFragment"
@@ -63,5 +66,11 @@
         android:name="com.example.otpgeneratorwithrecovery.ShowQRCodeFragment"
         android:label="@string/qr_code"
         tools:layout="@layout/fragment_show_qr_code">
+    </fragment>
+    <fragment
+        android:id="@+id/SaveSharedBackupQRCodeFragment"
+        android:name="com.example.otpgeneratorwithrecovery.SaveSharedBackupQRCodeFragment"
+        android:label="@string/save_shared_backup_qr_code"
+        tools:layout="@layout/fragment_save_shared_backup_qr_code">
     </fragment>
 </navigation>

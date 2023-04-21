@@ -6,6 +6,7 @@
     <string name="list_otp_fragment_label">List OTP</string>
     <string name="create_backup_fragment_label">Create Backup</string>
     <string name="list_created_backup_fragment_label">List Created Backup</string>
+    <string name="save_shared_backup_qr_code">Save Shared Backup (QR Code)</string>
 
     <string name="camera_permission_rationale_title">Permission Needed For Camera</string>
     <string name="camera_permission_rationale_message">This permission is needed to scan the QR code.</string>
