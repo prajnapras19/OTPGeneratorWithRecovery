@@ -60,6 +60,7 @@ public class SharedSecret {
         for (int i = 0; i < keyBytes.length; i++) {
             needToShare[i + iv.length] = keyBytes[i];
         }
+        System.out.println("yang jadi needToShare (hex): " + Hex.encodeHexString(needToShare));
 
         Map<Integer, byte[]> parts;
         if (recipients.length == 1) {
@@ -77,6 +78,11 @@ public class SharedSecret {
 
             Scheme scheme = new Scheme(new SecureRandom(), recipients.length, threshold);
             parts = scheme.split(needToShare);
+
+            // debug join
+            Scheme scheme2 = new Scheme(new SecureRandom(), recipients.length, threshold);
+            byte[] joined = scheme2.join(parts);
+            System.out.println("yang di-join (hex): " + Hex.encodeHexString(joined));
         }
 
         // random uid
@@ -166,7 +172,7 @@ public class SharedSecret {
         cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         byte[] cipherText = cipher.doFinal(input.getBytes());
 
-        System.out.println("yang jadi hasil enkripsi (base32): " + Hex.encodeHexString(cipherText));
+        System.out.println("yang jadi hasil enkripsi (base32): " + Base32Wrapper.encodeBytesToString(cipherText));
         return Base32Wrapper.encodeBytesToString(cipherText);
     }
 
