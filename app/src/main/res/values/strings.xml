@@ -6,8 +6,8 @@
     <string name="list_otp_fragment_label">List OTP</string>
     <string name="create_backup_fragment_label">Create Backup</string>
     <string name="list_created_backup_fragment_label">List Created Backup</string>
-    <string name="save_shared_backup_qr_code">Save Shared Backup (QR Code)</string>
-    <string name="save_shared_backup_manual_input">Save Shared Backup (manual)</string>
+    <string name="save_shared_backup_qr_code_fragment_label">Save Shared Backup (QR Code)</string>
+    <string name="save_shared_backup_manual_input_fragment_label">Save Shared Backup (manual)</string>
     <string name="list_shared_backup_fragment_label">List Shared Backup</string>
     <string name="recover_otp_by_scan_qr_code_fragment_label">Recover OTP (QR Code)</string>
 

@@ -79,13 +79,13 @@
     <fragment
         android:id="@+id/SaveSharedBackupManualInputFragment"
         android:name="com.example.otpgeneratorwithrecovery.SaveSharedBackupManualInputFragment"
-        android:label="@string/save_shared_backup_manual_input"
+        android:label="@string/save_shared_backup_manual_input_fragment_label"
         tools:layout="@layout/fragment_save_shared_backup_manual_input">
     </fragment>
     <fragment
         android:id="@+id/SaveSharedBackupQRCodeFragment"
         android:name="com.example.otpgeneratorwithrecovery.SaveSharedBackupQRCodeFragment"
-        android:label="@string/save_shared_backup_qr_code"
+        android:label="@string/save_shared_backup_qr_code_fragment_label"
         tools:layout="@layout/fragment_save_shared_backup_qr_code">
     </fragment>
     <fragment
