@@ -2,6 +2,8 @@ package com.example.otpgeneratorwithrecovery.crypto;
 
 import com.codahale.shamir.Scheme;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -49,19 +51,14 @@ public class SharedSecret {
         String encryptedSecret = SharedSecret.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
 
         // shares = SSSS(iv + key), iv is needed for AES CBC
-        ArrayList<Byte> listNeedToShare = new ArrayList<>();
         byte[] iv = ivParameterSpec.getIV();
-        for (int i = 0; i < iv.length; i++) {
-            listNeedToShare.add(iv[i]);
-        }
         byte[] keyBytes = key.getEncoded();
-        for (int i = 0; i < keyBytes.length; i++) {
-            listNeedToShare.add(keyBytes[i]);
+        byte[] needToShare = new byte[iv.length + keyBytes.length];
+        for (int i = 0; i < iv.length; i++) {
+            needToShare[i] = iv[i];
         }
-
-        byte[] needToShare = new byte[listNeedToShare.size()];
-        for (int i = 0; i < listNeedToShare.size(); i++) {
-            needToShare[i++] = listNeedToShare.get(i);
+        for (int i = 0; i < keyBytes.length; i++) {
+            needToShare[i + iv.length] = keyBytes[i];
         }
 
         Map<Integer, byte[]> parts;
