@@ -8,7 +8,8 @@
 
     <LinearLayout
         android:layout_height="fill_parent"
-        android:layout_width="fill_parent">
+        android:layout_width="fill_parent"
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/frame_layout_camera"
@@ -16,7 +17,7 @@
             android:layout_height="443dp" />
     <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="60dp">
+            android:layout_height="fill_parent">
             <LinearLayout
                 android:id="@+id/linear_layout_list_scanned"
                 android:layout_width="409dp"
