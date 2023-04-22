@@ -30,7 +30,15 @@ public class OTPFriend {
     public OTPFriend(String otpURIString) throws Exception {
         this.format = new OTPURIFormat(otpURIString);
 
-        if (!(this.format.getPrefix().equals(OTPFriend.PREFIX_FRIENDS) && this.format.getType().equals(OTPFriend.TYPE_FRIEND))) {
+        if (this.format.getPrefix() == null || !this.format.getPrefix().equals(OTPFriend.PREFIX_FRIENDS)) {
+            throw new Exception("inputted string not in otp friend format.");
+        }
+
+        if (this.format.getType() == null || !this.format.getType().equals(OTPFriend.TYPE_FRIEND)) {
+            throw new Exception("inputted string not in otp friend format.");
+        }
+
+        if (this.format.getLabel() == null) {
             throw new Exception("inputted string not in otp friend format.");
         }
 
@@ -77,7 +85,7 @@ public class OTPFriend {
 
     public void setName(String name) {
         this.name = name;
-        if (name.equals("")) {
+        if (name == null || name.equals("")) {
             this.name = "unknown";
         }
         Map<String, String> parameterMap = new HashMap<>();
