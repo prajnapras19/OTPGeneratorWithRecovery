@@ -98,7 +98,7 @@ public class Util {
         return clientID;
     }
 
-    public static byte[] getClientSecret(Context context) {
+    public static byte[] getClientSecretBytes(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.client_identity_shared_preferences_file), Context.MODE_PRIVATE);
         String clientSecret = sharedPref.getString("clientSecret", "");
         if (clientSecret.equals("")) {
@@ -118,5 +118,21 @@ public class Util {
             // this should not be ever called.
             return new byte[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
         }
+    }
+
+    public static String getClientSecretHexString(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.client_identity_shared_preferences_file), Context.MODE_PRIVATE);
+        String clientSecret = sharedPref.getString("clientSecret", "");
+        if (clientSecret.equals("")) {
+            try {
+                clientSecret = Hex.encodeHexString(AESWrapper.generateKey().getEncoded());
+            } catch (Exception e) {
+                // this should not be ever called.
+            }
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("clientSecret", clientSecret);
+            editor.apply();
+        }
+        return clientSecret;
     }
 }

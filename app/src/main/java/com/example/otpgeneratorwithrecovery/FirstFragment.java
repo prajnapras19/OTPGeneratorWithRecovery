@@ -30,8 +30,7 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.textviewClientId.setText(String.format("Client ID: %s", Util.getClientID(getContext())));
-        binding.textviewClientId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);;
+
 
         binding.buttonFirstToOtpSecretQrCodeScanner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,11 +104,11 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        binding.buttonFirstToRecoverOtpManualInput.setOnClickListener(new View.OnClickListener() {
+        binding.buttonFirstToShowClientIdentity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_RecoverOTPManualInputFragment);
+                        .navigate(R.id.action_FirstFragment_to_ShowClientIdentityFragment);
             }
         });
     }
