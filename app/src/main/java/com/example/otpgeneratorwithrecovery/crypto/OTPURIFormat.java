@@ -31,17 +31,17 @@ public class OTPURIFormat {
         }
 
         String[] labelSplit = typeSplit[1].split("\\?");
-        if (labelSplit.length != 2) {
-            return;
-        }
 
         this.otpURIString = otpURIString;
         this.prefix = URLDecoder.decode(prefixSplit[0], StandardCharsets.UTF_8);
         this.type = URLDecoder.decode(typeSplit[0], StandardCharsets.UTF_8);
         this.label = URLDecoder.decode(labelSplit[0], StandardCharsets.UTF_8);
-        String parameters = labelSplit[1];
-
         this.parameterMap = new HashMap<>();
+
+        if (labelSplit.length != 2) {
+            return;
+        }
+        String parameters = labelSplit[1];
         String[] parameterList = parameters.split("&");
         for (int i = 0; i < parameterList.length; i++) {
             String[] parameter = parameterList[i].split("=");
@@ -57,6 +57,14 @@ public class OTPURIFormat {
         this.type = type;
         this.label = label;
         this.parameterMap = parameterMap;
+
+        if (this.parameterMap == null || this.parameterMap.size() == 0) {
+            this.otpURIString =  String.format("%s://%s/%s",
+                    URLEncoder.encode(this.prefix, StandardCharsets.UTF_8),
+                    URLEncoder.encode(this.type, StandardCharsets.UTF_8),
+                    URLEncoder.encode(this.label, StandardCharsets.UTF_8));
+            return;
+        }
 
         List<String> parameterList = new ArrayList<>();
         for (Map.Entry<String,String> parameter : this.parameterMap.entrySet()) {
