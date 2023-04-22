@@ -13,6 +13,7 @@
     <string name="recover_otp_manual_input_fragment_label">Recover OTP (manual)</string>
     <string name="show_client_identity_fragment_label">Show Client Identity</string>
     <string name="add_friend_by_scan_qr_code_fragment_label">Add Friend (QR Code)</string>
+    <string name="add_friend_by_manual_input_fragment_label">Add Friend (manual)</string>
 
     <string name="camera_permission_rationale_title">Permission Needed For Camera</string>
     <string name="camera_permission_rationale_message">This permission is needed to scan the QR code.</string>
@@ -27,6 +28,8 @@
     <string name="submit">Submit</string>
     <string name="qr_code">QR Code</string>
     <string name="client_identity">Client Identity</string>
+    <string name="name_is_optional">Name (default: unknown)</string>
+    <string name="friend_client_identity_is_required">Friend\'s client identity (required)</string>
 
     <string name="client_identity_shared_preferences_file">com.example.otpgeneratorwithrecovery.clientidentity</string>
     <string name="friends_shared_preferences_file">com.example.otpgeneratorwithrecovery.friends</string>
