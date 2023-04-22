@@ -44,6 +44,7 @@ public class CreateBackupFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // TODO: fix this to select friend
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
@@ -179,10 +180,7 @@ public class CreateBackupFragment extends Fragment {
             savedSharedSecret[i] = Base32Wrapper.encodeStringToString(sharedSecret[i]);
         }
 
-        SharedPreferences sharedPrefCreatedBackup = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPrefCreatedBackup.edit();
-        editor.putString(Util.getNextSharedPreferenceID(sharedPrefCreatedBackup.getAll()), String.join("-", savedSharedSecret));
-        editor.apply();
+        // TODO: send to server
     }
 
     @Override
