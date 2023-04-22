@@ -21,8 +21,10 @@ public class OTPFriend {
     public OTPFriend(String clientID, byte[] clientSecret) {
         this.clientID = clientID;
         this.clientSecret = clientSecret;
-        this.format = new OTPURIFormat(OTPFriend.PREFIX_FRIENDS, OTPFriend.TYPE_FRIEND, String.format("%s:%s", clientID, Hex.encodeHexString(clientSecret)), null);
-        this.name = "";
+        this.name = "unknown";
+        Map<String, String> parameterMap = new HashMap<>();
+        parameterMap.put("name", this.name);
+        this.format = new OTPURIFormat(OTPFriend.PREFIX_FRIENDS, OTPFriend.TYPE_FRIEND, String.format("%s:%s", clientID, Hex.encodeHexString(clientSecret)), parameterMap);
     }
 
     public OTPFriend(String otpURIString) throws Exception {
@@ -47,9 +49,14 @@ public class OTPFriend {
             throw new Exception("inputted string not in otp friend format.");
         }
 
-        if (this.format.getParameter("name") != null) {
+        this.name = "unknown";
+        if (this.format.getParameter("name") != null && !this.format.getParameter("name").equals("")) {
             this.name = this.format.getParameter("name");
         }
+
+        Map<String, String> parameterMap = new HashMap<>();
+        parameterMap.put("name", name);
+        this.format = new OTPURIFormat(OTPFriend.PREFIX_FRIENDS, OTPFriend.TYPE_FRIEND, String.format("%s:%s", clientID, Hex.encodeHexString(clientSecret)), parameterMap);
     }
 
     public String toString() {
@@ -70,6 +77,9 @@ public class OTPFriend {
 
     public void setName(String name) {
         this.name = name;
+        if (name.equals("")) {
+            this.name = "unknown";
+        }
         Map<String, String> parameterMap = new HashMap<>();
         parameterMap.put("name", name);
         this.format = new OTPURIFormat(format.getPrefix(), format.getType(), format.getLabel(), parameterMap);
