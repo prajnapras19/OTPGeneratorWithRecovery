@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.crypto.SharedSecretToRecover;
 import com.example.otpgeneratorwithrecovery.databinding.FragmentSaveSharedBackupManualInputBinding;
+import com.example.otpgeneratorwithrecovery.util.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.util.Util;
 
 public class SaveSharedBackupManualInputFragment extends Fragment {
