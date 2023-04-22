@@ -30,7 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class SharedSecret {
     public static String[] generate(OTPSecret secret, String[] recipients, int threshold) throws Exception {
-        SecretKey key = AESWrapper.generateKey(128);
+        SecretKey key = AESWrapper.generateKey();
         IvParameterSpec ivParameterSpec = AESWrapper.generateIv();
         String encryptedSecret = AESWrapper.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
 

@@ -19,9 +19,9 @@ public class AESWrapper {
         return new IvParameterSpec(iv);
     }
 
-    public static SecretKey generateKey(int n) throws Exception {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(n);
+    public static SecretKey generateKey() throws Exception {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(AESWrapper.AES);
+        keyGenerator.init(128);
         SecretKey key = keyGenerator.generateKey();
         return key;
     }

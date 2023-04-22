@@ -1,6 +1,8 @@
 package com.example.otpgeneratorwithrecovery;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.otpgeneratorwithrecovery.databinding.FragmentFirstBinding;
+import com.example.otpgeneratorwithrecovery.util.Util;
 
 public class FirstFragment extends Fragment {
     private FragmentFirstBinding binding;
@@ -23,8 +26,12 @@ public class FirstFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.textviewClientId.setText(String.format("Client ID: %s", Util.getClientID(getContext())));
+        binding.textviewClientId.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);;
 
         binding.buttonFirstToOtpSecretQrCodeScanner.setOnClickListener(new View.OnClickListener() {
             @Override
