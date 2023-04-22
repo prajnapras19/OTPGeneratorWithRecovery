@@ -22,6 +22,15 @@
             android:id="@+id/action_FirstFragment_to_CreateBackupFragment"
             app:destination="@id/CreateBackupFragment" />
         <action
+            android:id="@+id/action_FirstFragment_to_ListCreatedBackupFragment"
+            app:destination="@id/ListCreatedBackupFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_SaveSharedBackupQRCodeFragment"
+            app:destination="@id/SaveSharedBackupQRCodeFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_SaveSharedBackupManualInputFragment"
+            app:destination="@id/SaveSharedBackupManualInputFragment" />
+        <action
             android:id="@+id/action_FirstFragment_to_ListSharedBackupFragment"
             app:destination="@id/ListSharedBackupFragment" />
         <action
@@ -56,10 +65,31 @@
         tools:layout="@layout/fragment_create_backup">
     </fragment>
     <fragment
+        android:id="@+id/ListCreatedBackupFragment"
+        android:name="com.example.otpgeneratorwithrecovery.ListCreatedBackupFragment"
+        android:label="@string/list_created_backup_fragment_label"
+        tools:layout="@layout/fragment_list_created_backup">
+        <action
+            android:id="@+id/action_ListCreatedBackupFragment_to_ShowQRCodeFragment"
+            app:destination="@id/ShowQRCodeFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/ShowQRCodeFragment"
         android:name="com.example.otpgeneratorwithrecovery.ShowQRCodeFragment"
         android:label="@string/qr_code"
         tools:layout="@layout/fragment_show_qr_code">
+    </fragment>
+    <fragment
+        android:id="@+id/SaveSharedBackupManualInputFragment"
+        android:name="com.example.otpgeneratorwithrecovery.SaveSharedBackupManualInputFragment"
+        android:label="@string/save_shared_backup_manual_input_fragment_label"
+        tools:layout="@layout/fragment_save_shared_backup_manual_input">
+    </fragment>
+    <fragment
+        android:id="@+id/SaveSharedBackupQRCodeFragment"
+        android:name="com.example.otpgeneratorwithrecovery.SaveSharedBackupQRCodeFragment"
+        android:label="@string/save_shared_backup_qr_code_fragment_label"
+        tools:layout="@layout/fragment_save_shared_backup_qr_code">
     </fragment>
     <fragment
         android:id="@+id/ListSharedBackupFragment"
