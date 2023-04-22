@@ -36,6 +36,9 @@ public class OTPFriend {
         try {
             this.clientID = UUID.fromString(label[0]).toString();
             this.clientSecret = Hex.decodeHex(label[1]);
+            if (this.clientSecret.length != 16) {
+                throw new Exception("inputted string not in otp friend format.");
+            }
         } catch (Exception e) {
             throw new Exception("inputted string not in otp friend format.");
         }
