@@ -12,6 +12,7 @@
     <string name="recover_otp_by_scan_qr_code_fragment_label">Recover OTP (QR Code)</string>
     <string name="recover_otp_manual_input_fragment_label">Recover OTP (manual)</string>
     <string name="show_client_identity_fragment_label">Show Client Identity</string>
+    <string name="add_friend_by_scan_qr_code_fragment_label">Add Friend (QR Code)</string>
 
     <string name="camera_permission_rationale_title">Permission Needed For Camera</string>
     <string name="camera_permission_rationale_message">This permission is needed to scan the QR code.</string>

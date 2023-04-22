@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_ShowClientIdentityFragment"
             app:destination="@id/ShowClientIdentityFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_AddFriendByScanQRCodeFragment"
+            app:destination="@id/AddFriendByScanQRCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/OTPSecretQRCodeScannerFragment"
@@ -120,5 +123,11 @@
         android:name="com.example.otpgeneratorwithrecovery.ShowClientIdentityFragment"
         android:label="@string/client_identity"
         tools:layout="@layout/fragment_show_client_identity">
+    </fragment>
+    <fragment
+        android:id="@+id/AddFriendByScanQRCodeFragment"
+        android:name="com.example.otpgeneratorwithrecovery.AddFriendByScanQRCodeFragment"
+        android:label="@string/add_friend_by_scan_qr_code_fragment_label"
+        tools:layout="@layout/fragment_add_friend_by_scan_qr_code">
     </fragment>
 </navigation>
