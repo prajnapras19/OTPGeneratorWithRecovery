@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import com.example.otpgeneratorwithrecovery.R;
-import com.example.otpgeneratorwithrecovery.crypto.AESWrapper;
-import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;

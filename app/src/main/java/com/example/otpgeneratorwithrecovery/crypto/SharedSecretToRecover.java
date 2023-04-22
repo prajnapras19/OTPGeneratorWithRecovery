@@ -2,6 +2,8 @@ package com.example.otpgeneratorwithrecovery.crypto;
 
 import android.annotation.SuppressLint;
 
+import com.example.otpgeneratorwithrecovery.util.Base32Wrapper;
+
 import java.util.HashMap;
 import java.util.Map;
 

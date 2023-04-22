@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.otpgeneratorwithrecovery.crypto.Base32Wrapper;
+import com.example.otpgeneratorwithrecovery.util.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.crypto.OTPSecret;
 import com.example.otpgeneratorwithrecovery.crypto.SharedSecret;
 import com.example.otpgeneratorwithrecovery.databinding.FragmentRecoverOtpManualInputBinding;

@@ -1,6 +1,6 @@
 package com.example.otpgeneratorwithrecovery.crypto;
 
-import org.apache.commons.codec.binary.Base32;
+import com.example.otpgeneratorwithrecovery.util.Base32Wrapper;
 
 /**
  * This class is a wrapper for the shared OTP secret from a service provider.

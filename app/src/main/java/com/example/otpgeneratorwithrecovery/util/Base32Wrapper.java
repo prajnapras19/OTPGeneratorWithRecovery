@@ -1,4 +1,4 @@
-package com.example.otpgeneratorwithrecovery.crypto;
+package com.example.otpgeneratorwithrecovery.util;
 
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;

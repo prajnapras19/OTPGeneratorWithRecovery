@@ -1,4 +1,4 @@
-package com.example.otpgeneratorwithrecovery.crypto;
+package com.example.otpgeneratorwithrecovery.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
