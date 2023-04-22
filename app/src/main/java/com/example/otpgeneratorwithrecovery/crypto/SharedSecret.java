@@ -29,26 +29,10 @@ import javax.crypto.spec.SecretKeySpec;
  * Sharing and assembling is done within this class.
  */
 public class SharedSecret {
-    private static final String encryption = "AES/CBC/PKCS5Padding";
-
-    // https://www.baeldung.com/java-aes-encryption-decryption
-    public static IvParameterSpec generateIv() {
-        byte[] iv = new byte[16];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
-    }
-
-    public static SecretKey generateKey(int n) throws Exception {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(n);
-        SecretKey key = keyGenerator.generateKey();
-        return key;
-    }
-
     public static String[] generate(OTPSecret secret, String[] recipients, int threshold) throws Exception {
-        SecretKey key = SharedSecret.generateKey(128);
-        IvParameterSpec ivParameterSpec = SharedSecret.generateIv();
-        String encryptedSecret = SharedSecret.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
+        SecretKey key = AESWrapper.generateKey(128);
+        IvParameterSpec ivParameterSpec = AESWrapper.generateIv();
+        String encryptedSecret = AESWrapper.encrypt(secret.getBase32EncodedSecret(), key, ivParameterSpec);
 
         // shares = SSSS(iv + key), iv is needed for AES CBC
         byte[] iv = ivParameterSpec.getIV();
@@ -136,7 +120,7 @@ public class SharedSecret {
         byte[] ivBytes = Arrays.copyOfRange(recovered, 0, 16);
         byte[] keyBytes = Arrays.copyOfRange(recovered, 16, 32);
 
-        String decryptedSecret = SharedSecret.decrypt(encryptedSecret, new SecretKeySpec(keyBytes, "AES"), new IvParameterSpec(ivBytes));
+        String decryptedSecret = AESWrapper.decrypt(encryptedSecret, new SecretKeySpec(keyBytes, AESWrapper.AES), new IvParameterSpec(ivBytes));
 
         Map<String, String> newParameterMap = new HashMap<>();
         newParameterMap.putAll(pickedSharedSecretToRecover.getFormat().getParameterMap());
@@ -155,19 +139,5 @@ public class SharedSecret {
 
         OTPURIFormat format = new OTPURIFormat(OTPSecret.PREFIX_OTP_SECRET, pickedSharedSecretToRecover.getFormat().getType(), pickedSharedSecretToRecover.getFormat().getLabel(), newParameterMap);
         return new OTPSecret(format);
-    }
-
-    public static String encrypt(String input, SecretKey key, IvParameterSpec iv) throws Exception {
-        Cipher cipher = Cipher.getInstance(encryption);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-        byte[] cipherText = cipher.doFinal(input.getBytes());
-        return Base32Wrapper.encodeBytesToString(cipherText);
-    }
-
-    public static String decrypt(String base32EncodedCipherText, SecretKey key, IvParameterSpec iv) throws Exception {
-        Cipher cipher = Cipher.getInstance(encryption);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
-        byte[] decrypted = cipher.doFinal(Base32Wrapper.decodeStringToBytes(base32EncodedCipherText));
-        return new String(decrypted, StandardCharsets.UTF_8);
     }
 }
