@@ -2,10 +2,12 @@ package com.example.otpgeneratorwithrecovery;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,123 +28,45 @@ public class FirstFragment extends Fragment {
         return binding.getRoot();
     }
 
+    class ButtonAndActionDTO {
+        public Button button;
+        public int action;
+        public ButtonAndActionDTO(Button button, int action) {
+            this.button = button;
+            this.action = action;
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ButtonAndActionDTO[] buttonAndActionList = new ButtonAndActionDTO[]{
+                new ButtonAndActionDTO(binding.buttonFirstToOtpSecretQrCodeScanner, R.id.action_FirstFragment_to_OTPSecretQRCodeScannerFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToOtpSecretManualInput, R.id.action_FirstFragment_to_OTPSecretManualInputFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToListOtp, R.id.action_FirstFragment_to_ListOTPFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToCreateBackup, R.id.action_FirstFragment_to_CreateBackupFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToListCreatedBackup, R.id.action_FirstFragment_to_ListCreatedBackupFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToSaveSharedBackupQrCode, R.id.action_FirstFragment_to_SaveSharedBackupQRCodeFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToSaveSharedBackupManualInput, R.id.action_FirstFragment_to_SaveSharedBackupManualInputFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToListSharedBackup, R.id.action_FirstFragment_to_ListSharedBackupFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToRecoverOtpByScanQrCode, R.id.action_FirstFragment_to_RecoverOTPByScanQRCodeFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToRecoverOtpManualInput, R.id.action_FirstFragment_to_RecoverOTPManualInputFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToShowClientIdentity, R.id.action_FirstFragment_to_ShowClientIdentityFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToAddFriendByScanQrCode, R.id.action_FirstFragment_to_AddFriendByScanQRCodeFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToAddFriendByManualInput, R.id.action_FirstFragment_to_AddFriendByManualInputFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToListFriend, R.id.action_FirstFragment_to_ListFriendFragment),
+        };
 
-
-        binding.buttonFirstToOtpSecretQrCodeScanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_OTPSecretQRCodeScannerFragment);
-            }
-        });
-
-        binding.buttonFirstToOtpSecretManualInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_OTPSecretManualInputFragment);
-            }
-        });
-
-        binding.buttonFirstToListOtp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_ListOTPFragment);
-            }
-        });
-
-        binding.buttonFirstToCreateBackup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_CreateBackupFragment);
-            }
-        });
-
-        binding.buttonFirstToListCreatedBackup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_ListCreatedBackupFragment);
-            }
-        });
-
-        binding.buttonFirstToSaveSharedBackupQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SaveSharedBackupQRCodeFragment);
-            }
-        });
-
-        binding.buttonFirstToSaveSharedBackupManualInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SaveSharedBackupManualInputFragment);
-            }
-        });
-
-        binding.buttonFirstToListSharedBackup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_ListSharedBackupFragment);
-            }
-        });
-
-        binding.buttonFirstToRecoverOtpByScanQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_RecoverOTPByScanQRCodeFragment);
-            }
-        });
-
-        binding.buttonFirstToRecoverOtpManualInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_RecoverOTPManualInputFragment);
-            }
-        });
-
-        binding.buttonFirstToShowClientIdentity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_ShowClientIdentityFragment);
-            }
-        });
-
-        binding.buttonFirstToAddFriendByScanQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_AddFriendByScanQRCodeFragment);
-            }
-        });
-
-        binding.buttonFirstToAddFriendByManualInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_AddFriendByManualInputFragment);
-            }
-        });
-
-        binding.buttonFirstToListFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_ListFriendFragment);
-            }
-        });
+        for (ButtonAndActionDTO dto : buttonAndActionList) {
+            dto.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NavHostFragment.findNavController(FirstFragment.this)
+                            .navigate(dto.action);
+                }
+            });
+        }
     }
 
     @Override
