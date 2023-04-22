@@ -2,6 +2,8 @@ package com.example.otpgeneratorwithrecovery.crypto;
 
 import org.apache.commons.codec.binary.Hex;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -64,5 +66,12 @@ public class OTPFriend {
 
     public byte[] getClientSecret() {
         return this.clientSecret;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        Map<String, String> parameterMap = new HashMap<>();
+        parameterMap.put("name", name);
+        this.format = new OTPURIFormat(format.getPrefix(), format.getType(), format.getLabel(), parameterMap);
     }
 }

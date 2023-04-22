@@ -29,6 +29,7 @@
     <string name="client_identity">Client Identity</string>
 
     <string name="client_identity_shared_preferences_file">com.example.otpgeneratorwithrecovery.clientidentity</string>
+    <string name="friends_shared_preferences_file">com.example.otpgeneratorwithrecovery.friends</string>
     <string name="otp_secret_shared_preferences_file">com.example.otpgeneratorwithrecovery.otpsecret</string>
     <string name="created_backup_shared_preferences_file">com.example.otpgeneratorwithrecovery.createdbackup</string>
     <string name="shared_backup_shared_preferences_file">com.example.otpgeneratorwithrecovery.sharedbackup</string>
