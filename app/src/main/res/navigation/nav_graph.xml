@@ -48,6 +48,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_AddFriendByManualInputFragment"
             app:destination="@id/AddFriendByManualInputFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ListFriendFragment"
+            app:destination="@id/ListFriendFragment" />
     </fragment>
     <fragment
         android:id="@+id/OTPSecretQRCodeScannerFragment"
@@ -134,15 +137,15 @@
         tools:layout="@layout/fragment_add_friend_by_scan_qr_code">
     </fragment>
     <fragment
-        android:id="@+id/AddFriendByScanQRCodeFragment"
-        android:name="com.example.otpgeneratorwithrecovery.AddFriendByScanQRCodeFragment"
-        android:label="@string/add_friend_by_scan_qr_code_fragment_label"
-        tools:layout="@layout/fragment_add_friend_by_scan_qr_code">
-    </fragment>
-    <fragment
         android:id="@+id/AddFriendByManualInputFragment"
         android:name="com.example.otpgeneratorwithrecovery.AddFriendByManualInputFragment"
         android:label="@string/add_friend_by_manual_input_fragment_label"
         tools:layout="@layout/fragment_add_friend_by_manual_input">
+    </fragment>
+    <fragment
+        android:id="@+id/ListFriendFragment"
+        android:name="com.example.otpgeneratorwithrecovery.ListFriendFragment"
+        android:label="@string/list_friend_fragment_label"
+        tools:layout="@layout/fragment_list_friend">
     </fragment>
 </navigation>
