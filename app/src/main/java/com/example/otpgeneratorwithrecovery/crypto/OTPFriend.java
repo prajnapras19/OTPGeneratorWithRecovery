@@ -14,11 +14,13 @@ public class OTPFriend {
     private OTPURIFormat format;
     private String clientID;
     private byte[] clientSecret;
+    private String name;
 
     public OTPFriend(String clientID, byte[] clientSecret) {
         this.clientID = clientID;
         this.clientSecret = clientSecret;
         this.format = new OTPURIFormat(OTPFriend.PREFIX_FRIENDS, OTPFriend.TYPE_FRIEND, String.format("%s:%s", clientID, Hex.encodeHexString(clientSecret)), null);
+        this.name = "";
     }
 
     public OTPFriend(String otpURIString) throws Exception {
@@ -42,9 +44,25 @@ public class OTPFriend {
         } catch (Exception e) {
             throw new Exception("inputted string not in otp friend format.");
         }
+
+        if (this.format.getParameter("name") != null) {
+            this.name = this.format.getParameter("name");
+        }
     }
 
     public String toString() {
         return this.format.toString();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getClientID() {
+        return this.clientID;
+    }
+
+    public byte[] getClientSecret() {
+        return this.clientSecret;
     }
 }
