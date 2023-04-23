@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class CreateBackupFragment extends Fragment {
     private FragmentCreateBackupBinding binding;
-    private final static String CHOOSE_SECRET = "Choose secret";
+    private final static String CHOOSE_SECRET = "Choose OTP";
     private final static String THRESHOLD = "Threshold (default: number of recipients)";
     RecipientAdapter adapterRecipients;
 
