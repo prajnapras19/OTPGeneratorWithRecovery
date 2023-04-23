@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.otpgeneratorwithrecovery.client.Client;
+import com.example.otpgeneratorwithrecovery.client.SharedBackup;
 import com.example.otpgeneratorwithrecovery.crypto.OTPFriend;
 import com.example.otpgeneratorwithrecovery.util.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.crypto.OTPSecret;
@@ -233,13 +235,24 @@ public class CreateBackupFragment extends Fragment {
         // share secret
         String[] sharedSecret = SharedSecret.generate(otpSecret, recipients, threshold);
 
+        // TODO: also send to server
+        SharedBackup[] sharedBackups = new SharedBackup[recipients.length];
+        Integer[] checkedNumbers = adapterRecipients.getCheckedNumbers();
+        for (int i = 0; i < checkedNumbers.length; i++) {
+            sharedBackups[i] = new SharedBackup(friendArrayList.get(checkedNumbers[i]), sharedSecret[i]);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Send To Server Status");
+        builder.setMessage(Client.sendSharedBackup(getContext(), sharedBackups));
+        AlertDialog alert = builder.create();
+        alert.show();
+
         // encode for saving
         String[] savedSharedSecret = new String[sharedSecret.length];
         for (int i = 0; i < sharedSecret.length; i++) {
             savedSharedSecret[i] = Base32Wrapper.encodeStringToString(sharedSecret[i]);
         }
-
-        // TODO: also send to server
 
         SharedPreferences sharedPrefCreatedBackup = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefCreatedBackup.edit();

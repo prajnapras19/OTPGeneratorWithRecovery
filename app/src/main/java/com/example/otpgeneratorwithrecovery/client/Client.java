@@ -7,8 +7,13 @@ import android.os.AsyncTask;
 
 import com.example.otpgeneratorwithrecovery.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -66,6 +71,49 @@ public class Client {
         }
     }
 
+    public static String sendSharedBackup(Context context, SharedBackup[] sharedBackups) {
+        SendSharedBackupExecutor executor = new SendSharedBackupExecutor();
+        try {
+            JSONArray ja = new JSONArray();
+            for (SharedBackup sharedBackup : sharedBackups) {
+                ja.put(sharedBackup.getJSONObject());
+            }
+            executor.execute(getBaseURL(context), ja.toString()).get();
+            return executor.getResult();
+        } catch (Exception e) {
+            return SendSharedBackupExecutor.FAILED_TO_SEND_SHARED_BACKUP;
+        }
+    }
+
+    static class SendSharedBackupExecutor extends AsyncTask<String, Void, Void> {
+        OkHttpClient client = new OkHttpClient();
+        public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        public static final String FAILED_TO_SEND_SHARED_BACKUP = "Failed to send shared backup to server";
+        public static final String BACKUP_SENT_SUCCESSFULLY = "Backup sent successfully to server";
+        String result = FAILED_TO_SEND_SHARED_BACKUP;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                Request.Builder builder = new Request.Builder();
+                builder.url(String.format("%s/insert", params[0]));
+                RequestBody body = RequestBody.create(JSON, params[1]);
+                Request request = builder.post(body).build();
+                Response response = client.newCall(request).execute();
+                if (response.code() == 204) {
+                    result = BACKUP_SENT_SUCCESSFULLY;
+                }
+            } catch (Exception e){
+                // do nothing
+            }
+            return (Void)null;
+        }
+
+        public String getResult() {
+            return result;
+        }
+    }
+
     public static void getSharedBackup(Context context, String clientID) {
         GetSharedBackupExecutor executor = new GetSharedBackupExecutor(context);
         executor.execute(Client.getBaseURL(context), clientID);
@@ -86,7 +134,6 @@ public class Client {
                 builder.url(String.format("%s/get/%s", params[0], params[1]));
                 Request request = builder.build();
                 Response response = client.newCall(request).execute();
-                return response.body().string();
             } catch (Exception e){
                 // do nothing
             }
