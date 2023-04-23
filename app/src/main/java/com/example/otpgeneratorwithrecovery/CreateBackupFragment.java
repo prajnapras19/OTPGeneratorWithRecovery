@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ScrollView;
 
@@ -17,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.otpgeneratorwithrecovery.crypto.OTPFriend;
 import com.example.otpgeneratorwithrecovery.util.Base32Wrapper;
 import com.example.otpgeneratorwithrecovery.crypto.OTPSecret;
 import com.example.otpgeneratorwithrecovery.crypto.SharedSecret;
@@ -24,6 +27,7 @@ import com.example.otpgeneratorwithrecovery.databinding.FragmentCreateBackupBind
 import com.example.otpgeneratorwithrecovery.util.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +36,8 @@ import java.util.Map;
 public class CreateBackupFragment extends Fragment {
     private FragmentCreateBackupBinding binding;
     private final static String CHOOSE_SECRET = "Choose secret";
+    private final static String THRESHOLD = "Threshold (default: number of recipients)";
+    RecipientAdapter adapterRecipients;
 
     @Override
     public View onCreateView(
@@ -45,8 +51,8 @@ public class CreateBackupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // fill otp secrets
         SharedPreferences sharedPref = getContext().getSharedPreferences(getString(R.string.otp_secret_shared_preferences_file), Context.MODE_PRIVATE);
-
         Map<String, ?> otpSecrets = sharedPref.getAll();
 
         ArrayList<String> otpIdentifiers = new ArrayList<>();
@@ -61,34 +67,36 @@ public class CreateBackupFragment extends Fragment {
             }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, otpIdentifiers);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.choiceCreateBackup.setAdapter(adapter);
+        ArrayAdapter<String> adapterOTPSecrets = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, otpIdentifiers);
+        adapterOTPSecrets.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.choiceCreateBackup.setAdapter(adapterOTPSecrets);
 
-        // initialize with one recipient (full secret)
-        EditText editText = new EditText(getContext());
-        editText.setHint("Recipient 1");
-        binding.linearLayoutRecipientsCreateBackup.addView(editText);
-        binding.scrollViewCreateBackupFragment.fullScroll(ScrollView.FOCUS_DOWN);
+        // fill recipients
+        SharedPreferences friendsSharedPref = getContext().getSharedPreferences(getString(R.string.friends_shared_preferences_file), Context.MODE_PRIVATE);
+        Map<String, ?> friends = friendsSharedPref.getAll();
 
-        binding.buttonAddRecipientsCreateBackup.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onClick(View view) {
-                // add threshold field if recipients >= 2
-                if (binding.linearLayoutRecipientsCreateBackup.getChildCount() == 1) {
-                    EditText editText = new EditText(getContext());
-                    editText.setHint(String.format("Threshold (default: number of recipients)", binding.linearLayoutRecipientsCreateBackup.getChildCount() + 1));
-                    binding.linearLayoutThresholdCreateBackup.addView(editText);
-                }
-
-                EditText editText = new EditText(getContext());
-                editText.setHint(String.format("Recipient %d", binding.linearLayoutRecipientsCreateBackup.getChildCount() + 1));
-                binding.linearLayoutRecipientsCreateBackup.addView(editText);
-
-                binding.scrollViewCreateBackupFragment.fullScroll(ScrollView.FOCUS_DOWN);
+        ArrayList<String> recipients = new ArrayList<>();
+        for (String k : Util.getSortedMapKey(friends)) {
+            try {
+                OTPFriend friend = new OTPFriend((String)friends.get(k));
+                recipients.add(String.format("%s (%s)", friend.getName(), friend.getClientID()));
+            } catch (Exception e) {
+                Log.v("CreateBackupFragment", e.getMessage());
             }
-        });
+        }
+
+        adapterRecipients = new RecipientAdapter(getContext(), R.layout.checkbox_layout, recipients);
+        binding.listViewRecipients.setAdapter(adapterRecipients);
+
+        // fill threshold
+        ArrayList<String> numbers = new ArrayList<>();
+        numbers.add(CreateBackupFragment.THRESHOLD);
+        for (int j = 0; j < recipients.size(); j++) {
+            numbers.add(String.valueOf(j + 1));
+        }
+        ArrayAdapter<String> adapterThreshold = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, numbers);
+        adapterThreshold.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.choiceThreshold.setAdapter(adapterThreshold);
 
         binding.buttonSubmitCreateBackup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,11 +128,52 @@ public class CreateBackupFragment extends Fragment {
         });
     }
 
+    class RecipientAdapter extends ArrayAdapter<String> {
+        private final List<String> items;
+        private boolean[] isCheckedList;
+        private int layoutResource;
+
+        public RecipientAdapter(Context context, int resource, List<String> items) {
+            super(context, resource, items);
+            this.items = items;
+            this.layoutResource = resource;
+            this.isCheckedList = new boolean[items.size()];
+            for (int i = 0; i < items.size(); i++) {
+                this.isCheckedList[i] = false;
+            }
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(this.layoutResource, parent, false);
+            }
+            CheckBox checkBox = convertView.findViewById(R.id.checkbox);
+            checkBox.setText(items.get(position));
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    isCheckedList[position] = isChecked;
+                }
+            });
+
+            return convertView;
+        }
+
+        public String[] getCheckedItems() {
+            List<String> res = new ArrayList<>();
+            for (int i = 0; i < items.size(); i++) {
+                if (isCheckedList[i]) {
+                    res.add(items.get(i));
+                }
+            }
+            return res.toArray(new String[0]);
+        }
+    }
+
     public boolean isValid() {
         boolean someFieldsAreEmpty = binding.choiceCreateBackup.getSelectedItem().toString().equals(CreateBackupFragment.CHOOSE_SECRET);
-        for (int i = 0; i < binding.linearLayoutRecipientsCreateBackup.getChildCount(); i++) {
-            someFieldsAreEmpty |= ((EditText)binding.linearLayoutRecipientsCreateBackup.getChildAt(i)).getText().toString().equals("");
-        }
+        someFieldsAreEmpty |= (adapterRecipients.getCheckedItems().length == 0);
         return !someFieldsAreEmpty;
     }
 
@@ -153,20 +202,15 @@ public class CreateBackupFragment extends Fragment {
         }
 
         // parse recipients
-        String[] recipients = new String[binding.linearLayoutRecipientsCreateBackup.getChildCount()];
-        for (int i = 0; i < binding.linearLayoutRecipientsCreateBackup.getChildCount(); i++) {
-            recipients[i] = ((EditText)binding.linearLayoutRecipientsCreateBackup.getChildAt(i)).getText().toString();
-        }
+        String[] recipients = adapterRecipients.getCheckedItems();
 
         // parse threshold
         int threshold = 1;
-        if (recipients.length > 1) {
-            String thresholdString = ((EditText)binding.linearLayoutThresholdCreateBackup.getChildAt(0)).getText().toString();
-            if (thresholdString.equals("")) {
-                threshold = recipients.length;
-            } else {
-                threshold = Integer.valueOf(thresholdString);
-            }
+        String thresholdString = binding.choiceThreshold.getSelectedItem().toString();
+        if (thresholdString.equals(CreateBackupFragment.THRESHOLD)) {
+            threshold = recipients.length; // TODO
+        } else {
+            threshold = Integer.valueOf(thresholdString);
         }
 
         // share secret
@@ -178,6 +222,8 @@ public class CreateBackupFragment extends Fragment {
             savedSharedSecret[i] = Base32Wrapper.encodeStringToString(sharedSecret[i]);
         }
 
+        // TODO: also send to server
+
         SharedPreferences sharedPrefCreatedBackup = getContext().getSharedPreferences(getString(R.string.created_backup_shared_preferences_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefCreatedBackup.edit();
         editor.putString(Util.getNextSharedPreferenceID(sharedPrefCreatedBackup.getAll()), String.join("-", savedSharedSecret));
@@ -188,5 +234,6 @@ public class CreateBackupFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        adapterRecipients = null;
     }
 }

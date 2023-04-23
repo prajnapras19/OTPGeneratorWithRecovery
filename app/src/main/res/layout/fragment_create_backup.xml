@@ -13,43 +13,45 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center">
+            android:layout_height="fill_parent">
 
             <Spinner
                 android:id="@+id/choice_create_backup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
+                android:spinnerMode="dialog"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
             </Spinner>
 
-            <LinearLayout
-                android:id="@+id/linear_layout_recipients_create_backup"
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_layout_threshold_create_backup"
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/button_add_recipients_create_backup"
+            <Spinner
+                android:id="@+id/choice_threshold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_recipient"
+                android:spinnerMode="dialog"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent">
+            </Spinner>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose recipients"
+                android:padding="16dp"
+                android:textSize="20sp"
+            ></TextView>
+
+            <ListView
+                android:id="@+id/list_view_recipients"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            </ListView>
+
             <Button
                 android:id="@+id/button_submit_create_backup"
                 android:layout_width="wrap_content"
