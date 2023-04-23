@@ -6,9 +6,14 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.example.otpgeneratorwithrecovery.R;
+import com.example.otpgeneratorwithrecovery.crypto.OTPFriend;
+import com.example.otpgeneratorwithrecovery.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -114,36 +119,41 @@ public class Client {
         }
     }
 
-    public static void getSharedBackup(Context context, String clientID) {
-        GetSharedBackupExecutor executor = new GetSharedBackupExecutor(context);
-        executor.execute(Client.getBaseURL(context), clientID);
+    public static List<SharedBackup> getSharedBackup(Context context) {
+        List<SharedBackup> res = new ArrayList<>();
+        try {
+            OTPFriend clientIdentity = new OTPFriend(Util.getClientID(context), Util.getClientSecretBytes(context));
+            GetSharedBackupExecutor executor = new GetSharedBackupExecutor();
+            executor.execute(Client.getBaseURL(context), clientIdentity.getClientID()).get();
+            for (int i = 0; i < executor.result.length(); i++) {
+                try {
+                    res.add(new SharedBackup(clientIdentity, executor.result.getJSONObject(i)));
+                } catch (Exception e) {
+                    // do nothing
+                }
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
+        return res;
     }
 
-    static class GetSharedBackupExecutor extends AsyncTask<String, Void, String> {
+    static class GetSharedBackupExecutor extends AsyncTask<String, Void, Void> {
         OkHttpClient client = new OkHttpClient();
-        Context context;
-
-        public GetSharedBackupExecutor(Context context) {
-            this.context = context;
-        }
+        JSONArray result = new JSONArray();
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Void doInBackground(String... params) {
             try {
                 Request.Builder builder = new Request.Builder();
                 builder.url(String.format("%s/get/%s", params[0], params[1]));
                 Request request = builder.build();
                 Response response = client.newCall(request).execute();
+                result = new JSONArray(response.body());
             } catch (Exception e){
                 // do nothing
             }
-            return "[]";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            // TODO
-            System.out.println("yang didapatkan " + s);
+            return (Void)null;
         }
     }
 }
