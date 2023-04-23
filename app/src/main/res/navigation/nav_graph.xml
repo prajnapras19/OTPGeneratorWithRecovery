@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_ListFriendFragment"
             app:destination="@id/ListFriendFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_SetBackupServerFragment"
+            app:destination="@id/SetBackupServerFragment" />
     </fragment>
     <fragment
         android:id="@+id/OTPSecretQRCodeScannerFragment"
@@ -147,5 +150,11 @@
         android:name="com.example.otpgeneratorwithrecovery.ListFriendFragment"
         android:label="@string/list_friend_fragment_label"
         tools:layout="@layout/fragment_list_friend">
+    </fragment>
+    <fragment
+        android:id="@+id/SetBackupServerFragment"
+        android:name="com.example.otpgeneratorwithrecovery.SetBackupServerFragment"
+        android:label="@string/set_backup_server_fragment_label"
+        tools:layout="@layout/fragment_set_backup_server">
     </fragment>
 </navigation>

@@ -56,6 +56,7 @@ public class FirstFragment extends Fragment {
                 new ButtonAndActionDTO(binding.buttonFirstToAddFriendByScanQrCode, R.id.action_FirstFragment_to_AddFriendByScanQRCodeFragment),
                 new ButtonAndActionDTO(binding.buttonFirstToAddFriendByManualInput, R.id.action_FirstFragment_to_AddFriendByManualInputFragment),
                 new ButtonAndActionDTO(binding.buttonFirstToListFriend, R.id.action_FirstFragment_to_ListFriendFragment),
+                new ButtonAndActionDTO(binding.buttonFirstToSetBackupServer, R.id.action_FirstFragment_to_SetBackupServerFragment),
         };
 
         for (ButtonAndActionDTO dto : buttonAndActionList) {
