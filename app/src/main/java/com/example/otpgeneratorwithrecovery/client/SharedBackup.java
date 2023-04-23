@@ -28,7 +28,7 @@ public class SharedBackup {
     public SharedBackup(OTPFriend clientIdentity, JSONObject jsonObject) throws Exception {
         // receive
         this.sharedSecret = jsonObject.getString(SharedBackup.SHARED_SECRET);
-        this.clientID = jsonObject.getString(SharedBackup.CLIENT_ID).getClientID();
+        this.clientID = jsonObject.getString(SharedBackup.CLIENT_ID);
         if (!clientID.equals(clientIdentity.getClientID())) {
             throw new Exception("client not match");
         }
