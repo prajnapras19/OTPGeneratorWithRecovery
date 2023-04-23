@@ -173,7 +173,7 @@ public class CreateBackupFragment extends Fragment {
             List<String> res = new ArrayList<>();
             for (int i = 0; i < items.size(); i++) {
                 if (isCheckedList[i]) {
-                    res.add(items.get(i).split(". ")[1]);
+                    res.add(items.get(i).split("\\. ")[1]);
                 }
             }
             return res.toArray(new String[0]);
