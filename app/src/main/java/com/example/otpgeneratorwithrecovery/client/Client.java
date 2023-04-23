@@ -6,10 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.example.otpgeneratorwithrecovery.R;
-import com.example.otpgeneratorwithrecovery.util.AESWrapper;
-import com.example.otpgeneratorwithrecovery.util.Util;
-
-import org.apache.commons.codec.binary.Hex;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,10 +19,11 @@ import okhttp3.Response;
  */
 public class Client {
     private static final String SERVER = "server";
+    private static final String NOT_OK = "NOT OK";
 
     public static String getBaseURL(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.client_identity_shared_preferences_file), Context.MODE_PRIVATE);
-        return sharedPref.getString(Client.SERVER, "");
+        return sharedPref.getString(Client.SERVER, "-");
     }
 
     public static void setBaseURL(Context context, String baseURL) {
@@ -36,9 +33,42 @@ public class Client {
         editor.apply();
     }
 
+    public static String checkHealth(String baseURL) {
+        CheckHealthExecutor executor = new CheckHealthExecutor();
+        try {
+            executor.execute(baseURL).get();
+            return executor.getResult();
+        } catch (Exception e) {
+            return Client.NOT_OK;
+        }
+    }
+
+    static class CheckHealthExecutor extends AsyncTask<String, Void, Void> {
+        OkHttpClient client = new OkHttpClient();
+        String result = Client.NOT_OK;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                Request.Builder builder = new Request.Builder();
+                builder.url(String.format("%s/_healthcheck", params[0]));
+                Request request = builder.build();
+                Response response = client.newCall(request).execute();
+                result = response.body().string();
+            } catch (Exception e){
+                result = Client.NOT_OK;
+            }
+            return (Void)null;
+        }
+
+        public String getResult() {
+            return result;
+        }
+    }
+
     public static void getSharedBackup(Context context, String clientID) {
-        GetSharedBackupExecutor getExecutor = new GetSharedBackupExecutor(context);
-        getExecutor.execute(Client.getBaseURL(context), clientID);
+        GetSharedBackupExecutor executor = new GetSharedBackupExecutor(context);
+        executor.execute(Client.getBaseURL(context), clientID);
     }
 
     static class GetSharedBackupExecutor extends AsyncTask<String, Void, String> {

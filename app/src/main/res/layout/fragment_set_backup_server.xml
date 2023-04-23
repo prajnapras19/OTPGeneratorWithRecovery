@@ -17,7 +17,7 @@
             android:gravity="center">
 
             <EditText
-                android:id="@+id/shared_backup_manual_input"
+                android:id="@+id/set_backup_server_input"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/backup_server_is_required"/>
