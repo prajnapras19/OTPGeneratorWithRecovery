@@ -34,9 +34,13 @@ public class SetBackupServerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    String newBaseURL = binding.setBackupServerInput.getText().toString();
+                    if (newBaseURL.equals("")) {
+                        newBaseURL = Client.getBaseURL(getContext());
+                    }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Status");
-                    builder.setMessage(Client.checkHealth(binding.setBackupServerInput.getText().toString()));
+                    builder.setMessage(Client.checkHealth(newBaseURL));
                     AlertDialog alert = builder.create();
                     alert.show();
                 } catch (Exception e) {
