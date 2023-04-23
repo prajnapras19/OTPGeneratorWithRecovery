@@ -51,11 +51,10 @@ public class Client {
 
         @Override
         protected String doInBackground(String... params) {
-            Request.Builder builder = new Request.Builder();
-            builder.url(String.format("%s/get/%s", params[0], params[1]));
-            Request request = builder.build();
-
             try {
+                Request.Builder builder = new Request.Builder();
+                builder.url(String.format("%s/get/%s", params[0], params[1]));
+                Request request = builder.build();
                 Response response = client.newCall(request).execute();
                 return response.body().string();
             } catch (Exception e){
