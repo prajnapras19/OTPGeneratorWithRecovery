@@ -38,6 +38,8 @@ public class CreateBackupFragment extends Fragment {
     private final static String CHOOSE_SECRET = "Choose OTP";
     private final static String THRESHOLD = "Threshold (default: number of recipients)";
     RecipientAdapter adapterRecipients;
+    ArrayList<OTPFriend> friendArrayList;
+
 
     @Override
     public View onCreateView(
@@ -48,6 +50,7 @@ public class CreateBackupFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("DefaultLocale")
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -76,10 +79,14 @@ public class CreateBackupFragment extends Fragment {
         Map<String, ?> friends = friendsSharedPref.getAll();
 
         ArrayList<String> recipients = new ArrayList<>();
+        friendArrayList = new ArrayList<>();
+        i = 1;
         for (String k : Util.getSortedMapKey(friends)) {
             try {
                 OTPFriend friend = new OTPFriend((String)friends.get(k));
-                recipients.add(String.format("%s (%s)", friend.getName(), friend.getClientID()));
+                friendArrayList.add(friend);
+                recipients.add(String.format("%d. %s (%s)", i, friend.getName(), friend.getClientID()));
+                i++;
             } catch (Exception e) {
                 Log.v("CreateBackupFragment", e.getMessage());
             }
@@ -164,10 +171,20 @@ public class CreateBackupFragment extends Fragment {
             List<String> res = new ArrayList<>();
             for (int i = 0; i < items.size(); i++) {
                 if (isCheckedList[i]) {
-                    res.add(items.get(i));
+                    res.add(items.get(i).split(". ")[1]);
                 }
             }
             return res.toArray(new String[0]);
+        }
+
+        public Integer[] getCheckedNumbers() {
+            List<Integer> res = new ArrayList<>();
+            for (int i = 0; i < items.size(); i++) {
+                if (isCheckedList[i]) {
+                    res.add(Integer.valueOf(items.get(i).split(". ")[0]) - 1);
+                }
+            }
+            return res.toArray(new Integer[0]);
         }
     }
 
@@ -235,5 +252,6 @@ public class CreateBackupFragment extends Fragment {
         super.onDestroyView();
         binding = null;
         adapterRecipients = null;
+        friendArrayList = null;
     }
 }
