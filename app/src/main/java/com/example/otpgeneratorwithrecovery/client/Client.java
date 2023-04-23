@@ -1,7 +1,15 @@
 package com.example.otpgeneratorwithrecovery.client;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+
+import com.example.otpgeneratorwithrecovery.R;
+import com.example.otpgeneratorwithrecovery.util.AESWrapper;
+import com.example.otpgeneratorwithrecovery.util.Util;
+
+import org.apache.commons.codec.binary.Hex;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,15 +22,32 @@ import okhttp3.Response;
  * - https://guides.codepath.com/android/Using-OkHttp
  */
 public class Client {
-    private static final String BASE_URL = "http://REDACTED";
+    private static final String SERVER = "server";
 
-    public static void Get(String clientID) {
-        GetExecutor getExecutor = new GetExecutor();
-        getExecutor.execute(Client.BASE_URL, clientID);
+    public static String getBaseURL(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.client_identity_shared_preferences_file), Context.MODE_PRIVATE);
+        return sharedPref.getString(Client.SERVER, "");
     }
 
-    static class GetExecutor extends AsyncTask<String, Void, String> {
+    public static void setBaseURL(Context context, String baseURL) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.client_identity_shared_preferences_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Client.SERVER, baseURL);
+        editor.apply();
+    }
+
+    public static void getSharedBackup(Context context, String clientID) {
+        GetSharedBackupExecutor getExecutor = new GetSharedBackupExecutor(context);
+        getExecutor.execute(Client.getBaseURL(context), clientID);
+    }
+
+    static class GetSharedBackupExecutor extends AsyncTask<String, Void, String> {
         OkHttpClient client = new OkHttpClient();
+        Context context;
+
+        public GetSharedBackupExecutor(Context context) {
+            this.context = context;
+        }
 
         @Override
         protected String doInBackground(String... params) {
