@@ -208,7 +208,7 @@ public class CreateBackupFragment extends Fragment {
         int threshold = 1;
         String thresholdString = binding.choiceThreshold.getSelectedItem().toString();
         if (thresholdString.equals(CreateBackupFragment.THRESHOLD)) {
-            threshold = recipients.length; // TODO
+            threshold = recipients.length;
         } else {
             threshold = Integer.valueOf(thresholdString);
         }
