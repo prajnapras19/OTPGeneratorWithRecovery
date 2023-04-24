@@ -149,7 +149,7 @@ public class Client {
                 builder.url(String.format("%s/get/%s", params[0], params[1]));
                 Request request = builder.build();
                 Response response = client.newCall(request).execute();
-                result = new JSONArray(response.body());
+                result = new JSONArray(response.body().string());
             } catch (Exception e){
                 // do nothing
             }
