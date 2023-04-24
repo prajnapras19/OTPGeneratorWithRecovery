@@ -38,6 +38,7 @@ public class SharedSecret {
 
         Map<Integer, byte[]> parts;
         if (recipients.length == 1) {
+            threshold = 1;
             parts = new HashMap<>();
             parts.put(1, needToShare);
         } else {
