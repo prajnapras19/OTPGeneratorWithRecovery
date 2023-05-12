@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Util {
+    public static String UTF_8 = "UTF-8";
+
     public static String getNextSharedPreferenceID(Map<String, ?> sharedPreferenceAllValues) {
         int max = 0;
         if (sharedPreferenceAllValues == null) {
